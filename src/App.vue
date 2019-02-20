@@ -12,12 +12,14 @@
 					</el-submenu>
 				</el-menu>
 			</el-aside>
-			<el-main>Main</el-main>
+			<el-main>
+				<router-view/>
+			</el-main>
 		</el-container>
 	</el-container>
 
 		
-  <router-view/>
+  
   </div>
 </template>
 
@@ -66,7 +68,6 @@ export default {
 		-moz-osx-font-smoothing: grayscale;
 		text-align: center;
 		color: #2c3e50;
-		margin-top: 60px;
 	}
   .el-header, .el-footer {
     background-color: #B3C0D1;
@@ -86,7 +87,7 @@ export default {
     background-color: #E9EEF3;
     color: #333;
     text-align: center;
-    line-height: 160px;
+    /* line-height: 160px; */
   }
   
   body > .el-container {
