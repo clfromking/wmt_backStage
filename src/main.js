@@ -3,7 +3,18 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+import qs from 'qs'
 
+
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.transformRequest = function (data) {
+    return qs.stringify(data);
+}
+Vue.use(VueAxios, axios)
+
+Vue.prototype.url = 'https://api.apiopen.top/'
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
