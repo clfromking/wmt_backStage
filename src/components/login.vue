@@ -40,11 +40,11 @@
 		data() {
 			return {
 				phone :'',
-				code :''
+				code :'',
 			}
 		},
 		mounted(){
-			this.drawLine();
+			
 		},
 		methods: {
 			login:function() {

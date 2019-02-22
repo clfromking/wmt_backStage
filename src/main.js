@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import Vuex from 'vuex'
 import qs from 'qs'
 import echarts from 'echarts'
 import '../src/assets/css/common.css'
@@ -36,15 +37,41 @@ axios.interceptors.response.use(function (response) {
 
 
 Vue.use(VueAxios, axios)
+Vue.use( Vuex );
 
 Vue.prototype.$echarts = echarts 
 Vue.prototype.url = 'https://www.waimaitong.xin/'
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
+
+//控制登录模块module
+const login = {
+	state:{
+		islogin:true
+	},
+	mutations:{
+		
+	},
+	actions:{
+		
+	}
+}
+
+
+const store = new Vuex.Store({
+    //待添加
+	//有需要的模块加进去
+	modules:{
+		login : login
+	}
+})
+
+
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
