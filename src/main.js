@@ -6,7 +6,9 @@ import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import qs from 'qs'
+import echarts from 'echarts'
 import '../src/assets/css/common.css'
+
 
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -15,6 +17,7 @@ axios.defaults.transformRequest = function (data) {
 }
 Vue.use(VueAxios, axios)
 
+Vue.prototype.$echarts = echarts 
 Vue.prototype.url = 'https://www.waimaitong.xin/'
 Vue.config.productionTip = false
 
