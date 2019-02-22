@@ -10,6 +10,7 @@
 						<template slot='title'><i :class="item.icon"></i>{{item.text}}</template>
 						<el-menu-item v-for="(item1,index1) in item.children" :index="''+(index+1)+''+'-'+(index1+1)">{{item1.text}}</el-menu-item>
 					</el-submenu>
+					<div>{{code}}</div>
 				</el-menu>
 			</el-aside>
 			<el-main>
@@ -50,25 +51,42 @@ export default {
 				{"icon":"el-icon-message","text":"业务管理"},
 				{"icon":"el-icon-message","text":"外卖运营管理"},
 				{"icon":"el-icon-message","text":"会员管理"}
-			]
+			],
+			code :''
 		}
 	},
 	mounted:function(){
-		this.axios.post(this.url+'EmailSearch',{'number':1012002}).then(res=>{
+// 		let [a,b] = await Promise.all([
+// 			this.axios.post(this.url+'wechat/test',{'code':1,'encryptedData':2,'iv':3,'inviterId':4}),
+// 			this.axios.post(this.url+'wechat/test',{'code':1,'encryptedData':2,'iv':3,'inviterId':4})
+// 		])
+// 		return{
+// 			code : a.code 
+// 		}
+// 		Promise.all([
+// 			this.axios.post(this.url+'wechat/test',{'code':1,'encryptedData':2,'iv':3,'inviterId':4}),
+// 			this.axios.post(this.url+'wechat/test',{'code':1,'encryptedData':2,'iv':3,'inviterId':4})
+// 		]).then((res)=>{
+// 			console.log(res)
+// 			this.code = res[0].code
+// 			console.log(res)
+// 		})
+		this.axios.post(this.url+'wechat/test',{'code':1,'encryptedData':2,'iv':3,'inviterId':4}).then(res=>{
 			console.log(res)
+			this.code = res.code
 		})
 	},
 }
 </script>
 
 <style>
-	#app {
-		font-family: 'Avenir', Helvetica, Arial, sans-serif;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-		text-align: center;
-		color: #2c3e50;
-	}
+  #app {
+	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-align: center;
+	color: #2c3e50;
+  }
   .el-header, .el-footer {
     background-color: #B3C0D1;
     color: #333;

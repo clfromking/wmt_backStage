@@ -15,7 +15,7 @@ axios.defaults.transformRequest = function (data) {
 }
 Vue.use(VueAxios, axios)
 
-Vue.prototype.url = 'https://api.apiopen.top/'
+Vue.prototype.url = 'https://www.waimaitong.xin/'
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

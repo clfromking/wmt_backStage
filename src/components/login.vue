@@ -44,7 +44,7 @@
 			}
 		},
 		mounted(){
-			this.drawLine();
+			// this.drawLine();
 		},
 		methods: {
 			login:function() {
