@@ -58,7 +58,7 @@ Vue.config.productionTip = false
 //控制登录模块module
 const login = {
 	state:{
-		islogin:true
+		islogin:false
 	},
 	mutations:{
 		

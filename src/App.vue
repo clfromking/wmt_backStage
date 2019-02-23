@@ -33,24 +33,73 @@ export default {
 			options: [
 				{
 					"icon":"el-icon-message",
-					"text":"系统首页",
+					"text":"内容管理",
 					"children":[
-						{"text":"选项1"},
-						{"text":"选项2"},
-						{"text":"选项3"}
+						{"text":"banner管理"},
+					],
+				},
+				{
+					"icon":"el-icon-message",
+					"text":"商品管理",
+					"children":[
+						{"text":"商品库"},
+						{"text":"品类管理"},
 					],
 				},
 				{
 					"icon":"el-icon-message",
 					"text":"订单管理",
 					"children":[
-						{"text":"选项1"},
-						{"text":"选项2"},
+						{"text":"商品订单"},
+						{"text":"商品订单"},
 					],
 				},
-				{"icon":"el-icon-message","text":"业务管理"},
-				{"icon":"el-icon-message","text":"外卖运营管理"},
-				{"icon":"el-icon-message","text":"会员管理"}
+				{
+					"icon":"el-icon-message",
+					"text":"服务单管理",
+					"children":[
+						{"text":"免租金开店"},
+						{"text":"外卖运营"},
+					],
+				},
+				{
+					"icon":"el-icon-message",
+					"text":"营销管理",
+					"children":[
+						{"text":"0元抢购"},
+					],
+				},
+				{
+					"icon":"el-icon-message",
+					"text":"会员管理",
+					"children":[
+						{"text":"会员管理"},
+					],
+				},
+				{
+					"icon":"el-icon-message",
+					"text":"账号管理",
+					"children":[
+						{"text":"账号管理"},
+					],
+				},
+				{
+					"icon":"el-icon-message",
+					"text":"角色管理",
+					"children":[
+						{"text":"角色管理"},
+					],
+				},
+				{
+					"icon":"el-icon-message",
+					"text":"财务管理",
+					"children":[
+						{"text":"用户余额账户"},
+						{"text":"用户分享金账户"},
+						{"text":"用户竞价账户"},
+						{"text":"总部账户"},
+					],
+				},
 			],
 			code :''
 		}

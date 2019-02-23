@@ -14,8 +14,8 @@
 				  maxlength='11'
 				  class="phone">
 				</el-input>	
-				<el-input clearable placeholder="请输入验证码" v-model="code" class="input-with-select">
-					<el-button slot="append" @click="getCode" type="primary">{{getCodeText}}</el-button>
+				<el-input maxlength='6' clearable placeholder="请输入验证码" v-model="code" class="input-with-select">
+					<el-button slot="append" :disabled="getCodeText!=='获取验证码'" @click="getCode" >{{getCodeText}}</el-button>
 				</el-input>
 				<el-button @click="login" plain class='login_btn' type="primary">登录</el-button>
 				
@@ -40,23 +40,50 @@
 			}
 		},
 		mounted(){
-
+			this.$store.state.login.islogin = true
 		},
 		methods: {
 			login:function() {
-				console.log(this.phone)
-				console.log(this.code)
+				if(!(/^1[34578]\d{9}$/.test(this.phone))){
+					this.$alert.error('手机号码格式不正确')
+				}
+				else if(this.code.length<6){
+					this.$alert.error('验证码格式不正确')
+				}
+				else{
+					console.log(this.$store.state.login.islogin)
+					
+					return
+					this.axios.post('/mgr/login/mobile',{"smsCode":this.code , 'mobile':this.phone}).then(res=>{
+						
+						if(res.data.code == 200){
+							
+						}
+						else{
+							this.$alert.error(res.data.msg)
+						}
+					})
+				}
 			},
 			
 			getCode:function(){
-				console.log(this.phone)
-				var phone = this.phone
-				if(!(/^1[34578]\d{9}$/.test(phone))){ 
-					this.$alert.error('错误','手机号码格式不正确',false)
+				if(!(/^1[34578]\d{9}$/.test(this.phone))){ 
+					this.$alert.error('手机号码格式不正确')
 				}
 				else{
 					this.axios.get('/mgr/sms/auth?mobile='+this.phone).then(res=>{
 						console.log(res)
+						if(res.data.code == 200){
+							for (let i = 60; i >= 0; i--) {
+							  setTimeout(() => {
+								// console.log(i)
+								this.getCodeText = i + "S"		
+								if (i == 0) {
+								  this.getCodeText = '获取验证码'
+								}
+							  }, 1000 * (60 - i))
+							}
+						}
 					})
 				}
 			}
@@ -66,8 +93,11 @@
 
 <style scoped>
 	.shade{
-		background: #000000;
-		opacity: 0.5;
+		background: url(../assets/img/login/bg.png) no-repeat;
+		background-size: 100% 100%;
+		/* background-size: cover; */
+		/* background-position: center; */
+		/* opacity: 0.5; */
 		height: 100vh;
 		width: 100vw;
 		position: fixed;

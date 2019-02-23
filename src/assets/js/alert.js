@@ -1,19 +1,19 @@
 import Vue from 'vue'
 
 
-function error(title,msg,showClose){
+function error(msg,title,showClose){
 	Vue.prototype.$notify.error({
-		title: title,
+		title: title||'错误',
 		message: msg,
-		showClose: showClose
+		showClose: showClose||false
 	});
 }
 
-function success(title,msg,showClose){
+function success(msg,title,showClose){
 	Vue.prototype.$notify.success({
-		title: title,
+		title: title||'成功',
 		message: msg,
-		showClose: showClose
+		showClose: showClose||false
 	});
 }
 
