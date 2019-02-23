@@ -8,15 +8,16 @@
 			</div>
 			<div class="login_container">
 				<el-input
-				  placeholder="请输入内容"
+				  placeholder="请输入手机号"
 				  v-model="phone"
 				  clearable
+				  maxlength='11'
 				  class="phone">
 				</el-input>	
-				<el-input clearable placeholder="请输入内容" v-model="code" class="input-with-select">
-					<el-button slot="append"  type="primary">输入验证码</el-button>
+				<el-input clearable placeholder="请输入验证码" v-model="code" class="input-with-select">
+					<el-button slot="append" @click="getCode" type="primary">{{getCodeText}}</el-button>
 				</el-input>
-				<el-button @click="login" class='login_btn' type="primary">登录</el-button>
+				<el-button @click="login" plain class='login_btn' type="primary">登录</el-button>
 				
 
 				<div id="myChart" :style="{width: '300px', height: '300px'}"></div>
@@ -28,46 +29,36 @@
 </template>
 
 <script>
-	// 引入基本模板
-	// let echarts = require('echarts/lib/echarts')
-	// 引入柱状图组件
-	// require('echarts/lib/chart/bar')
-	// 引入提示框和title组件
-	// require('echarts/lib/component/tooltip')
-	// require('echarts/lib/component/title')
 	export default{
 		name:'login',
+		
 		data() {
 			return {
 				phone :'',
 				code :'',
+				getCodeText:'获取验证码'
 			}
 		},
 		mounted(){
-			
+
 		},
 		methods: {
 			login:function() {
 				console.log(this.phone)
 				console.log(this.code)
 			},
-			drawLine() {
-			  // 基于准备好的dom，初始化echarts实例
-			  let myChart = this.$echarts.init(document.getElementById('myChart'))
-			  // 绘制图表
-			  myChart.setOption({
-				title: { text: 'ECharts 入门示例' },
-				tooltip: {},
-				xAxis: {
-				  data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
-				},
-				yAxis: {},
-				series: [{
-				  name: '销量',
-				  type: 'bar',
-				  data: [5, 20, 36, 10, 10, 20]
-				}]
-			  });
+			
+			getCode:function(){
+				console.log(this.phone)
+				var phone = this.phone
+				if(!(/^1[34578]\d{9}$/.test(phone))){ 
+					this.$alert.error('错误','手机号码格式不正确',false)
+				}
+				else{
+					this.axios.get('/mgr/sms/auth?mobile='+this.phone).then(res=>{
+						console.log(res)
+					})
+				}
 			}
 		},
 	}

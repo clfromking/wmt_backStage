@@ -56,25 +56,7 @@ export default {
 		}
 	},
 	mounted:function(){
-// 		let [a,b] = await Promise.all([
-// 			this.axios.post(this.url+'wechat/test',{'code':1,'encryptedData':2,'iv':3,'inviterId':4}),
-// 			this.axios.post(this.url+'wechat/test',{'code':1,'encryptedData':2,'iv':3,'inviterId':4})
-// 		])
-// 		return{
-// 			code : a.code 
-// 		}
-// 		Promise.all([
-// 			this.axios.post(this.url+'wechat/test',{'code':1,'encryptedData':2,'iv':3,'inviterId':4}),
-// 			this.axios.post(this.url+'wechat/test',{'code':1,'encryptedData':2,'iv':3,'inviterId':4})
-// 		]).then((res)=>{
-// 			console.log(res)
-// 			this.code = res[0].code
-// 			console.log(res)
-// 		})
-		this.axios.post(this.url+'wechat/test',{'code':1,'encryptedData':2,'iv':3,'inviterId':4}).then(res=>{
-			console.log(res)
-			this.code = res.code
-		})
+
 	},
 }
 </script>
