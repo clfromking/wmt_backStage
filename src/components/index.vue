@@ -1,6 +1,6 @@
 <template>
 	<el-container>
-		<el-header>Header</el-header>
+		<el-header style='height: 6.25rem;'>Header</el-header>
 		
 		<el-container>
 			<el-aside style='width: 12.5rem;'>
@@ -105,11 +105,15 @@
 </script>
 
 <style scoped>
+	.el-header{
+		background-image: linear-gradient(-77deg, #5E8DFF 0%, #75BAFB 99%);
+		height: 6.25rem;
+	}
 	.el-header, .el-footer {
 		background-color: #B3C0D1;
 		color: #333;
 		text-align: center;
-		line-height: 60px;
+		line-height: 6.25rem;
 	}
 	  
 	.el-aside {
@@ -117,7 +121,7 @@
 		color: #333;
 		text-align: center;
 		line-height: 200px;
-		height: calc(100vh - 60px);
+		height: calc(100vh - 6.25rem);
 		width: 12.5rem;
 	}
   

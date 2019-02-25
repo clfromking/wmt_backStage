@@ -67,9 +67,11 @@
 // 					return
 					this.axios.post('/mgr/login/mobile',{"smsCode":this.code , 'mobile':this.phone}).then(res=>{
 						if(res.data.code == 200){
+							console.log(res.data.data)
 							this.$alert.success('登录成功')
 							setTimeout(()=>{
 								var localStorage=window.localStorage;
+								localStorage.accessToken = res.data.data.accessToken
 								localStorage.islogin = true
 								this.$router.push({path:'/index'})
 							},1500)
@@ -116,6 +118,7 @@
 		/* opacity: 0.5; */
 		height: 100%;
 		width: 100%;
+		min-width: 1200px;
 		position: fixed;
 		top: 0;
 		left: 0;
