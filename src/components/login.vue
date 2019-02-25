@@ -3,8 +3,8 @@
 		<div class="shade"></div>
 		<div class="login_div">
 			<div class="title">
-				<div>快速登录</div>
-				<div>手机验证码登录</div>
+				<div @click="selectLoginType($event)" data-id='0' :class="selectIndex==0?'isSelect':''">快速登录</div>
+				<div @click="selectLoginType($event)" data-id='1' :class="selectIndex==1?'isSelect':''">手机验证码登录</div>
 			</div>
 			<div class="login_container">
 				<el-input
@@ -36,14 +36,25 @@
 			return {
 				phone :'',
 				code :'',
-				getCodeText:'获取验证码'
+				getCodeText:'获取验证码',
+				selectIndex:0,
 			}
 		},
 		mounted(){
-			this.$store.state.login.islogin = true
+			var localStorage=window.localStorage;
+			if(localStorage.islogin){
+				this.$router.push({path:'/index'})
+			}
+			
 		},
 		methods: {
-			login:function() {
+			//选择登录方式
+			selectLoginType:function(e){
+				this.selectIndex = e.target.dataset.id
+			},
+			
+			//登录按钮事件
+			login:function() {			
 				if(!(/^1[34578]\d{9}$/.test(this.phone))){
 					this.$alert.error('手机号码格式不正确')
 				}
@@ -51,13 +62,17 @@
 					this.$alert.error('验证码格式不正确')
 				}
 				else{
-					console.log(this.$store.state.login.islogin)
-					
-					return
+// 					console.log(this.$store.state.login.islogin)
+// 					this.$router.push({path:'/test'})
+// 					return
 					this.axios.post('/mgr/login/mobile',{"smsCode":this.code , 'mobile':this.phone}).then(res=>{
-						
 						if(res.data.code == 200){
-							
+							this.$alert.success('登录成功')
+							setTimeout(()=>{
+								var localStorage=window.localStorage;
+								localStorage.islogin = true
+								this.$router.push({path:'/index'})
+							},1500)
 						}
 						else{
 							this.$alert.error(res.data.msg)
@@ -66,6 +81,7 @@
 				}
 			},
 			
+			//获取验证码
 			getCode:function(){
 				if(!(/^1[34578]\d{9}$/.test(this.phone))){ 
 					this.$alert.error('手机号码格式不正确')
@@ -95,31 +111,32 @@
 	.shade{
 		background: url(../assets/img/login/bg.png) no-repeat;
 		background-size: 100% 100%;
-		/* background-size: cover; */
-		/* background-position: center; */
+		background-size: cover;
+		background-position: center;
 		/* opacity: 0.5; */
-		height: 100vh;
-		width: 100vw;
+		height: 100%;
+		width: 100%;
 		position: fixed;
 		top: 0;
 		left: 0;
 	}
 	.login_div{
-		width: 500px;
-		height: 500px;
+		width: 20%;
+		height: 50%;
 		background: #fff;
 		position: fixed;
-		top: 0;
+		top: 30%;
 		bottom: 0;
-		right: 0;
-		left: 0;
-		margin: auto;
+		right: 8%;
+		/* left: 0; */
+		/* margin: auto; */
 		border-radius: 10px;
 	}
 	.title{
-		height: 100px;
-		background: #0000FF;
+		height: 10vh;
+		/* background: #0000FF; */
 		display: flex;
+		color: #000;
 		border-top-left-radius: 10px;
 		border-top-right-radius: 10px;
 	}
@@ -127,23 +144,33 @@
 		width: 100%;
 		height: 100%;
 		text-align: center;
-		color: #fff;
-		line-height: 100px;
+		color: #000;
+		line-height: 10vh;
 		cursor: pointer;
+		font-size: .8rem;
 	}
 	.login_container{
-		height: 400px;
+		height: 40vh;
 		/* background: red; */
 	}
 	.phone{
-		width: 300px;
-		margin: 80px auto 40px;
+		width: 15vw;
+		margin: 5vh auto 4vh;
 	}
 	.input-with-select{
-		width: 300px;
+		width: 15vw;
 	}
 	.login_btn{
 		display: block;
-		margin: 50px auto;
+		width: 15vw;
+		margin: 4vh auto;
 	}
+	
+	
+	.isSelect{
+		border-bottom: 3px solid #0000FF;
+		box-sizing: border-box;
+	}
+	
+	
 </style>
