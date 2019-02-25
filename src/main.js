@@ -17,7 +17,7 @@ Vue.prototype.$echarts = echarts
 Vue.prototype.$alert =  { error,success } 
 Vue.prototype.url = 'https://www.beta.com'
 
-console.log(Vue.prototype.$a)
+
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.transformRequest = function (data) {
     return qs.stringify(data);
@@ -28,8 +28,6 @@ axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
 	
 	config.url = Vue.prototype.url + config.url
-	// console.log(this.url)
-	console.log(config.url)
 	return config;
 }, function (error) {
   // 对请求错误做些什么

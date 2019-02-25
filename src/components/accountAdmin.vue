@@ -41,19 +41,20 @@
 		
 		<div class="body">
 			<div class="clear btns">
-				<el-button style='margin-right: 24px;' type="primary fl">查询</el-button>
-				<el-button type="primary fl">清空查询条件</el-button>
+				<el-button style='margin-right: 24px;' @click='selectMsg' type="primary fl">查询</el-button>
+				<el-button type="primary fl" @click='clearSelect'>清空查询条件</el-button>
 				<el-button type="primary fr">添加</el-button>
 			</div>
 			<div class="table">
 				<template>
 				  <el-table
 					:data="tableData"
-					border
+					v-loading="loading"
 					style="width: 100%;display: inline-block;">
 					<el-table-column
 					  prop="name"
 					  label="姓名"
+					  row-class-name='test'
 					  align='center'
 					  width="311%">
 					</el-table-column>
@@ -87,7 +88,14 @@
 				  </el-table>
 				</template>
 			</div>
-			
+			<div class="block">
+				<el-pagination
+				  @current-change="handleCurrentChange"
+				  :page-size="pageSize"
+				  layout="total, prev, pager, next"
+				  :total="total">
+				</el-pagination>
+			</div>
 		</div>
 		
 		
@@ -111,31 +119,75 @@
 					{"label":'停用','value':'停用'},
 				],
 				optionValue:'全部',
-				tableData:''
+				tableData:'',
+				pageSize:10,
+				index:0,
+				total:0,
+				loading:true
 			}
 		},
 		mounted:function(){
-			var accessToken = window.localStorage.accessToken
-			console.log(window.localStorage.accessToken)
-			this.axios.post('/mgr/user/list',{"accessToken":accessToken,"pageSize":5,"index":0}).then(res=>{
-				console.log(res)
-				if(res.data.code == 200){
-					var list = res.data.data.list
-					for(let i=0;i<list.length;i++){
-						if(list[i].isEnabled == 1){
-							list[i].isEnabled = '启用'
-						}
-						else{
-							list[i].isEnabled = '停用'
-						}
-					}
-					this.tableData = list
-				}
-			})
+			this.loadTableData()
 		},
 		methods: {
-			handleClick(row) {
-				console.log(row);
+			//分页改变
+			handleCurrentChange:function(val) {
+				console.log(val)
+				this.index = val - 1
+				this.loading = true
+				this.loadTableData()
+			},
+			
+			selectMsg:function(){
+				if(this.name == '' && this.phone == '' && this.optionValue == '全部'){
+					return
+				}
+				else{
+					this.loadTableData()
+				}
+			},
+			
+			clearSelect:function(){
+				this.name = ''
+				this.phone = ''
+				this.optionValue = '全部'
+				this.loadTableData()
+			},
+			
+			
+			//加载表格数据
+			loadTableData:function(){
+				var accessToken = window.localStorage.accessToken
+				console.log(this.optionValue)
+				var isEnabled = ''
+				if(this.optionValue == '全部'){
+					isEnabled = null
+				}
+				else if(this.optionValue == '启用'){
+					isEnabled = 1
+				}
+				else{
+					isEnabled = 0
+				}
+				var postData = {"accessToken":accessToken ,'pageSize':this.pageSize,'index':this.index,'name':this.name,'mobile':this.phone,'isEnabled':isEnabled}
+				
+				this.axios.post('/mgr/user/list',postData).then(res=>{
+					// console.log(res)
+					if(res.data.code == 200){
+						var list = res.data.data.list
+						for(let i=0;i<list.length;i++){
+							if(list[i].isEnabled == 1){
+								list[i].isEnabled = '启用'
+							}
+							else{
+								list[i].isEnabled = '停用'
+							}
+						}
+						this.tableData = list
+						this.total = res.data.data.total
+						this.loading = false
+					}
+				})
 			}
 		},
 	}
@@ -165,11 +217,11 @@
 		margin-top: 25px;
 	}
 	.body{
-		height: 720px;
+		/* height: 720px; */
 		background: #fff;
 		border-radius: 5px;
 		box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
-		padding: 0 54px ;
+		padding: 0 54px 50px;
 		margin-top: 21px;
 		box-sizing: border-box;
 	}
@@ -187,4 +239,8 @@
 	.el-table td,.el-table th{
 		text-align: center !important;
 	}
+	.el-pagination{
+		margin-top: 20px;
+	}
+	
 </style>
