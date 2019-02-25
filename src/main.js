@@ -15,7 +15,7 @@ import { error,success } from '@/assets/js/alert.js'
 
 Vue.prototype.$echarts = echarts 
 Vue.prototype.$alert =  { error,success } 
-Vue.prototype.url = 'https://www.jiedankuai.com'
+Vue.prototype.url = 'https://www.beta.com'
 
 console.log(Vue.prototype.$a)
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
