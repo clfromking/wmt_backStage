@@ -8,32 +8,39 @@ import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
 import qs from 'qs'
 import echarts from 'echarts'
+import $ from 'jquery'
 import '../src/assets/css/common.css'
 import { error,success } from '@/assets/js/alert.js'
+import { post } from '@/assets/js/ajax.js'
 
 
 
 Vue.prototype.$echarts = echarts 
 Vue.prototype.$alert =  { error,success } 
-Vue.prototype.url = 'https://www.beta.com'
+Vue.prototype.$ajax =  { post } 
+Vue.prototype.url = 'http://www.beta.com:8080'
 
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.transformRequest = function (data) {
-    return qs.stringify(data);
+	// Vue.http.options.emulateJSON = true;
+	data = qs.stringify(data)
+    return data;
+	
 }
+
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
-	
+	console.log(config)
+// 	
 	config.url = Vue.prototype.url + config.url
 	return config;
 }, function (error) {
   // 对请求错误做些什么
 	return Promise.reject(error);
 });
-
 // 添加响应拦截器
 axios.interceptors.response.use(function (response) {
 	console.log(response)

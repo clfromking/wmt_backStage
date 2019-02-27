@@ -3,26 +3,36 @@
 		<div class="shade"></div>
 		<div class="login_div">
 			<div class="title">
-				<div @click="selectLoginType($event)" data-id='0' :class="selectIndex==0?'isSelect':''">快速登录</div>
+				<div @click="selectLoginType($event)" data-id='0' :class="selectIndex==0?'isSelect':''">手机密码登录</div>
 				<div @click="selectLoginType($event)" data-id='1' :class="selectIndex==1?'isSelect':''">手机验证码登录</div>
 			</div>
 			<div class="login_container">
-				<el-input
-				  placeholder="请输入手机号"
-				  v-model="phone"
-				  clearable
-				  maxlength='11'
-				  class="phone">
-				</el-input>	
-				<el-input maxlength='6' clearable placeholder="请输入验证码" v-model="code" class="input-with-select">
-					<el-button slot="append" :disabled="getCodeText!=='获取验证码'" @click="getCode" >{{getCodeText}}</el-button>
-				</el-input>
-				<el-button @click="login" plain class='login_btn' type="primary">登录</el-button>
+				<div v-show="selectIndex==0">
+					<el-input
+					  placeholder="请输入手机号"
+					  v-model="phone1"
+					  clearable
+					  maxlength='11'
+					  class="phone">
+					</el-input>	
+					<el-input maxlength='6' clearable placeholder="请输入密码" v-model="password" class="input-with-select">
+					</el-input>
+					<el-button @click="passwordLogin" plain class='login_btn' type="primary">登录</el-button>
+				</div>
+				<div v-show="selectIndex==1">
+					<el-input
+					  placeholder="请输入手机号"
+					  v-model="phone"
+					  clearable
+					  maxlength='11'
+					  class="phone">
+					</el-input>	
+					<el-input maxlength='6' clearable placeholder="请输入验证码" v-model="code" class="input-with-select">
+						<el-button slot="append" :disabled="getCodeText!=='获取验证码'" @click="getCode" >{{getCodeText}}</el-button>
+					</el-input>
+					<el-button @click="codeLogin" plain class='login_btn' type="primary">登录</el-button>
+				</div>
 				
-
-				<div id="myChart" :style="{width: '300px', height: '300px'}"></div>
-
-
 			</div>
 		</div>
 	</div>
@@ -35,6 +45,8 @@
 		data() {
 			return {
 				phone :'',
+				phone1 : '',
+				password :'',
 				code :'',
 				getCodeText:'获取验证码',
 				selectIndex:0,
@@ -53,18 +65,15 @@
 				this.selectIndex = e.target.dataset.id
 			},
 			
-			//登录按钮事件
-			login:function() {			
-				if(!(/^1[34578]\d{9}$/.test(this.phone))){
+			//密码登录按钮事件
+			passwordLogin:function(){
+				if(!(/^1[34578]\d{9}$/.test(this.phone1))){
 					this.$alert.error('手机号码格式不正确')
 				}
-				else if(this.code.length<6){
-					this.$alert.error('验证码格式不正确')
+				else if(this.code.length<=0){
+					this.$alert.error('密码不能为空')
 				}
 				else{
-// 					console.log(this.$store.state.login.islogin)
-// 					this.$router.push({path:'/test'})
-// 					return
 					this.axios.post('/mgr/login/mobile',{"smsCode":this.code , 'mobile':this.phone}).then(res=>{
 						if(res.data.code == 200){
 							console.log(res.data.data)
@@ -81,6 +90,34 @@
 						}
 					})
 				}
+			},
+			
+			//验证码登录按钮事件
+			codeLogin:function() {		
+				if(!(/^1[34578]\d{9}$/.test(this.phone))){
+					this.$alert.error('手机号码格式不正确')
+				}
+				else if(this.code.length<6){
+					this.$alert.error('验证码格式不正确')
+				}
+				else{
+					this.axios.post('/mgr/login/mobile',{"smsCode":this.code , 'mobile':this.phone}).then(res=>{
+						if(res.data.code == 200){
+							console.log(res.data.data)
+							this.$alert.success('登录成功')
+							setTimeout(()=>{
+								var localStorage=window.localStorage;
+								localStorage.accessToken = res.data.data.accessToken
+								localStorage.islogin = true
+								this.$router.push({path:'/index'})
+							},1500)
+						}
+						else{
+							this.$alert.error(res.data.msg)
+						}
+					})
+				}
+			
 			},
 			
 			//获取验证码

@@ -12,15 +12,21 @@
 				</el-menu>
 			</el-aside>
 			<el-main>
-				<router-view/>
+				<keep-alive :include="['accountAdmin']">	
+					<router-view/>
+				</keep-alive>
 			</el-main>
 		</el-container>
 	</el-container>
 </template>
 
 <script>
+	import accountAdmin from '@/components/accountAdmin.vue'
+	import accountOperation from '@/components/accountOperation.vue'
+	
 	export default{
 		name:'index',
+		components: { accountOperation, accountAdmin},
 		data() {
 			return {
 				options: [

@@ -6,6 +6,8 @@ import login from '@/components/login.vue'
 import index from '@/components/index.vue'
 import banner from '@/components/banner.vue'
 import accountAdmin from '@/components/accountAdmin.vue'
+import accountOperation from '@/components/accountOperation.vue'
+
 
 Vue.use(Router)
 Vue.use(ElementUI)
@@ -31,7 +33,15 @@ const router = new Router({
 				{
 					name:'accountAdmin',
 					path:'/accountAdmin',
-					component:accountAdmin
+					component:accountAdmin,
+					meta: {
+						keepAlive: true // 需要被缓存
+					}
+				},
+				{
+					name:'accountOperation',
+					path:'/accountOperation',
+					component:accountOperation
 				}
 			]
 		}

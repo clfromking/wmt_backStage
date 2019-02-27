@@ -24,8 +24,8 @@ body{font-family: PingFangSC,"microsoft yahei", "微软雅黑";}
 /*input:-ms-input-placeholder{*/
     /*color: #999;*/
 /*}*/
-.fl{float: left;}
-.fr{float: right;}
+.fl{float: left !important;}
+.fr{float: right !important;}
 .pr{position: relative;}
 
 .clear:after{
