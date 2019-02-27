@@ -10,13 +10,13 @@ import qs from 'qs'
 import echarts from 'echarts'
 import $ from 'jquery'
 import '../src/assets/css/common.css'
-import { error,success } from '@/assets/js/alert.js'
+import { error,success , info } from '@/assets/js/alert.js'
 import { post } from '@/assets/js/ajax.js'
 
 
 
 Vue.prototype.$echarts = echarts 
-Vue.prototype.$alert =  { error,success } 
+Vue.prototype.$alert =  { error,success ,info } 
 Vue.prototype.$ajax =  { post } 
 Vue.prototype.url = 'http://www.beta.com:8080'
 
@@ -43,7 +43,7 @@ axios.interceptors.request.use(function (config) {
 });
 // 添加响应拦截器
 axios.interceptors.response.use(function (response) {
-	console.log(response)
+	// console.log(response)
   // 对响应数据做点什么
 	return response;
  }, function (error) {

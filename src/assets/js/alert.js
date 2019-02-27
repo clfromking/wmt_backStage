@@ -17,7 +17,15 @@ function success(msg,title,showClose){
 	});
 }
 
+function info(msg,title,showClose){
+	Vue.prototype.$notify.info({
+		title: title||'提示',
+		message: msg,
+		showClose: showClose||false
+	})
+}
 export{
 	error,
-	success
+	success,
+	info
 }

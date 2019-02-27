@@ -4,7 +4,7 @@
 		
 		<el-container>
 			<el-aside style='width: 12.5rem;'>
-				<el-menu unique-opened>
+				<el-menu  unique-opened>
 					<el-submenu  v-for="(item,index) in options"  :index="''+(index+1)">
 						<template slot='title'><i :class="item.icon"></i>{{item.text}}</template>
 						<el-menu-item @click='goNav($event)' :data-path='item1.path' v-for="(item1,index1) in item.children" :index="''+(index+1)+''+'-'+(index1+1)">{{item1.text}}</el-menu-item>
@@ -31,14 +31,14 @@
 			return {
 				options: [
 					{
-						"icon":"el-icon-message",
+						"icon":"el-icon-document",
 						"text":"内容管理",
 						"children":[
 							{"text":"banner管理","path":'/banner'},
 						],
 					},
 					{
-						"icon":"el-icon-message",
+						"icon":"el-icon-tickets",
 						"text":"商品管理",
 						"children":[
 							{"text":"商品管理"},
@@ -46,15 +46,15 @@
 						],
 					},
 					{
-						"icon":"el-icon-message",
+						"icon":"el-icon-goods",
 						"text":"订单管理",
 						"children":[
-							{"text":"商品订单"},
+							{"text":"商品订单" , "path":'/goodsOrder'},
 							{"text":"购买会员订单"},
 						],
 					},
 					{
-						"icon":"el-icon-message",
+						"icon":"el-icon-service",
 						"text":"服务单管理",
 						"children":[
 							{"text":"免租金开店"},
@@ -62,7 +62,7 @@
 						],
 					},
 					{
-						"icon":"el-icon-message",
+						"icon":"el-icon-news",
 						"text":"营销管理",
 						"children":[
 							{"text":"0元抢购"},
@@ -70,14 +70,14 @@
 						],
 					},
 					{
-						"icon":"el-icon-message",
+						"icon":"el-icon-star-off",
 						"text":"会员管理",
 						"children":[
 							{"text":"会员管理"},
 						],
 					},
 					{
-						"icon":"el-icon-message",
+						"icon":"el-icon-sort",
 						"text":"财务管理",
 						"children":[
 							{"text":"商户余额账户"},
@@ -87,7 +87,7 @@
 						],
 					},
 					{
-						"icon":"el-icon-message",
+						"icon":"el-icon-view",
 						"text":"人员管理",
 						"children":[
 							{"text":"账号管理","path":'/accountAdmin'},
@@ -128,7 +128,7 @@
 		text-align: center;
 		line-height: 200px;
 		height: calc(100vh - 6.25rem);
-		width: 12.5rem;
+		width: 200px;
 	}
   
 	.el-main {

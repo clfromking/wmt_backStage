@@ -5,8 +5,10 @@ import 'element-ui/lib/theme-chalk/index.css'
 import login from '@/components/login.vue'
 import index from '@/components/index.vue'
 import banner from '@/components/banner.vue'
+import goodsOrder from '@/components/goodsOrder.vue'
 import accountAdmin from '@/components/accountAdmin.vue'
 import accountOperation from '@/components/accountOperation.vue'
+import showOrderDetail from '@/components/showOrderDetail.vue'
 
 
 Vue.use(Router)
@@ -29,6 +31,16 @@ const router = new Router({
 					name:'banner',
 					path:'/banner',
 					component:banner
+				},
+				{
+					name:'showOrderDetail',
+					path:'/showOrderDetail',
+					component:showOrderDetail
+				},
+				{
+					name:'goodsOrder',
+					path:'/goodsOrder',
+					component:goodsOrder
 				},
 				{
 					name:'accountAdmin',
