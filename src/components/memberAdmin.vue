@@ -2,25 +2,20 @@
 	<div>
 		<div class="header">
 			<el-breadcrumb separator-class="el-icon-arrow-right header-title">
-				<el-breadcrumb-item>账号管理</el-breadcrumb-item>
+				<el-breadcrumb-item>会员管理</el-breadcrumb-item>
 			</el-breadcrumb>
 			<div class="clear">
 				<div class="demo-input-suffix">
-					姓名：
-					<el-input placeholder="请输入姓名" v-model="name" maxLength='10' clearable>
+					品牌名称：
+					<el-input placeholder="请输入品牌名称" v-model="brandName" maxLength='20' clearable>
 					</el-input>
 				</div>
 				<div class="demo-input-suffix">
-					手机号：
-					<el-input placeholder="请输入手机号" v-model="phone" maxLength='11' clearable>
-					</el-input>
-				</div>
-				<div class="demo-input-suffix">
-					状态：
-					<el-select v-model="optionValue" placeholder="请选择">
-						<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-						</el-option>
-					</el-select>
+					<div class="block">
+						<span class="demonstration">会员期限：</span>
+						<el-date-picker :default-time="['00:00:00','23:59:00']" value-format="yyyy-MM-dd HH:mm:ss" unlink-panels v-model="timeLimit" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
+						</el-date-picker>
+					</div>
 				</div>
 			</div>
 
@@ -31,25 +26,22 @@
 			<div class="clear btns">
 				<el-button style='margin-right: 24px;' @click='queryMsg' type="primary fl">查询</el-button>
 				<el-button type="primary fl" @click='clearQuery'>清空查询条件</el-button>
-				<el-button type="primary fr" data-typeId='2' @click='routerTo($event)'>添加</el-button>
+				<el-button type="primary fr" @click='routerTo()'>会员卡设置</el-button>
 			</div>
 			<div class="table">
 				<template>
 					<el-table :data="tableData" v-loading="loading" style="width: 100%;display: inline-block;">
-						<el-table-column prop="name" label="姓名" row-class-name='test' align='center' width="311%">
+						<el-table-column prop="branchName" label="品牌名称" row-class-name='test' align='center' width="518%">
 						</el-table-column>
-						<el-table-column prop="mobile" label="手机号" align='center' width="311%">
+						<el-table-column prop="expiredAt" label="会员期限" align='center' width="518%">
 						</el-table-column>
-						<el-table-column prop="isEnabled" width="311%" align='center' label="状态">
-						</el-table-column>
-						<el-table-column prop="updTime" label="最近登录时间" align='center' width="311%">
-						</el-table-column>
-						<el-table-column label="操作" align='center' width="311%">
-							<template slot-scope="scope">
-								<el-button data-typeId='0'  @click='routerTo($event,scope.row)' type="text" size="small">查看</el-button>
-								<el-button data-typeId='1' @click='routerTo($event,scope.row)' type="text" size="small">编辑</el-button>
+						<el-table-column label="操作" align='center' width="518%">
+							<template slot-scope="scope">			
+								<el-button  @click='examine(scope.row)' type="text" size="small">查看</el-button>
+								
 							</template>
 						</el-table-column>
+						
 					</el-table>
 				</template>
 			</div>
@@ -65,28 +57,13 @@
 
 <script>
 	export default {
-		name: 'accountAdmin',
+		name: 'memberAdmin',
 		data() {
 			return {
-				name: '',
-				phone: '',
-				optionValue: '全部',
-				postName: '',
-				postPhone: '',
-				postOption: '全部',
-				options: [{
-						"label": '全部',
-						'value': '全部'
-					},
-					{
-						"label": '启用',
-						'value': '启用'
-					},
-					{
-						"label": '停用',
-						'value': '停用'
-					},
-				],
+				brandName:'',
+				timeLimit:'',
+				postBrandName: '',
+				posttimeLimit:'',
 				tableData: '',
 				pageSize: 10,
 				index: 0,
@@ -107,50 +84,50 @@
 
 			//查询
 			queryMsg: function() {
-				if (this.name == '' && this.phone == '' && this.optionValue == '全部') {
+				
+				if (this.brandName.replace(/\s+/g, "") == '' && this.timeLimit == '') {
 					this.$alert.info('请输入查询条件')
 					return
 				} else {
 					this.index = 0
-					this.postName = this.name
-					this.postPhone = this.phone
-					this.postOption = this.optionValue
+					this.postBrandName = this.brandName
+					this.posttimeLimit = this.timeLimit
 					this.loadTableData()
 				}
 			},
 
 			//清空查询条件
 			clearQuery: function() {
-				if (this.name == '' && this.phone == '' && this.optionValue == '全部') {
+				if (this.brandName.replace(/\s+/g, "") == '' && this.timeLimit == '') {
 					this.$alert.info('暂无查询条件')
 					return
-				} 
-				this.name = ''
-				this.phone = ''
-				this.optionValue = '全部'
-				this.postName = ''
-				this.postPhone = ''
-				this.postOption = '全部'
+				}
+				
+				this.brandName = ''
+				this.timeLimit = ''
+				this.postBrandName = ''
+				this.posttimeLimit = ''
 				this.index = 0
 				this.$alert.success('已清空')
 				this.loadTableData()
 			},
 
 			//跳转
-			routerTo: function(e,row) {
-				var query = {
-					type: e.target.dataset.typeid
-				}
-				console.log(e)
-				if(row){
-					query.id = row.id
-				}
+			routerTo: function() {
 				this.$router.push({
-					path: '/accountOperation',
-					query: query
+					path: '/setMemberCard'
 				})
 			},
-
+			
+			//查看
+			examine:function(row){
+				this.$router.push({
+					path: '/examineMemberRecord',
+					query: {
+						id:row.id
+					}
+				})
+			},
 		
 				
 			//加载表格数据
@@ -168,39 +145,26 @@
 					"accessToken": accessToken,
 					"pageSize": this.pageSize,
 					"index": this.index,
-					"name": this.postName.replace(/\s+/g, ""),
-					"mobile": this.postPhone.replace(/\s+/g, ""),
-					"isEnabled": isEnabled
+					"branchName": this.postBrandName.replace(/\s+/g, ""),
 				}
-				if (postData.name) {
+				if (postData.branchName) {
 
 				} else {
-					delete postData['name']
+					delete postData['branchName']
 				}
 
-				if (postData.mobile) {
-
-				} else {
-					delete postData['mobile']
+				
+				if(this.posttimeLimit){
+					postData.startTime = this.posttimeLimit[0]
+					postData.endTime = this.posttimeLimit[1]
 				}
 
-// 				if (postData.isEnabled) {
-// 
-// 				} else {
-// 					delete postData['isEnabled']
-// 				}
+				
 				// console.log(postData)
-				this.axios.post('/mgr/user/list', postData).then(res => {
-					// console.log(res)
+				this.axios.post('/mgr/m/member/list', postData).then(res => {
+					console.log(res)
 					if (res.data.code == 200) {
 						var list = res.data.data.list
-						for (let i = 0; i < list.length; i++) {
-							if (list[i].isEnabled == 1) {
-								list[i].isEnabled = '启用'
-							} else {
-								list[i].isEnabled = '停用'
-							}
-						}
 						this.tableData = list
 						this.total = res.data.data.total
 						this.loading = false
@@ -208,6 +172,9 @@
 							this.$alert.info('暂无数据')
 						}
 					}
+				}).catch(error=>{
+					this.$alert.error('网络错误，请刷新重试')
+					this.loading = false
 				})
 			},
 			
@@ -241,7 +208,7 @@
 	.demo-input-suffix {
 		display: inline-block;
 		float: left;
-		margin-right: 1.25rem;
+		margin-right: 50px;
 		margin-top: 25px;
 	}
 
@@ -253,6 +220,7 @@
 		padding: 0 54px 50px;
 		margin-top: 21px;
 		box-sizing: border-box;
+		
 	}
 
 	.el-input {

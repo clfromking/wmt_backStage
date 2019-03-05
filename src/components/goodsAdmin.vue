@@ -2,17 +2,12 @@
 	<div>
 		<div class="header">
 			<el-breadcrumb separator-class="el-icon-arrow-right header-title">
-				<el-breadcrumb-item>账号管理</el-breadcrumb-item>
+				<el-breadcrumb-item>商品管理</el-breadcrumb-item>
 			</el-breadcrumb>
 			<div class="clear">
 				<div class="demo-input-suffix">
-					姓名：
+					商品名称：
 					<el-input placeholder="请输入姓名" v-model="name" maxLength='10' clearable>
-					</el-input>
-				</div>
-				<div class="demo-input-suffix">
-					手机号：
-					<el-input placeholder="请输入手机号" v-model="phone" maxLength='11' clearable>
 					</el-input>
 				</div>
 				<div class="demo-input-suffix">
@@ -36,15 +31,25 @@
 			<div class="table">
 				<template>
 					<el-table :data="tableData" v-loading="loading" style="width: 100%;display: inline-block;">
-						<el-table-column prop="name" label="姓名" row-class-name='test' align='center' width="311%">
+						<el-table-column label="商品信息" row-class-name='test' align='center' width="259%">
+							<template slot-scope="scope">
+								<div class="imgDiv">
+									<img :src="scope.row.coverImg" alt="">
+								</div>
+								
+								<span class="span" style="">{{ scope.row.name }}</span>
+							</template>
 						</el-table-column>
-						<el-table-column prop="mobile" label="手机号" align='center' width="311%">
+						
+						<el-table-column prop="newPrice" label="售价"  align='center' width="259%">
 						</el-table-column>
-						<el-table-column prop="isEnabled" width="311%" align='center' label="状态">
+						<el-table-column prop="mobile" label="库存" align='center' width="259%">
 						</el-table-column>
-						<el-table-column prop="updTime" label="最近登录时间" align='center' width="311%">
+						<el-table-column prop="isEnabled" width="259%" align='center' label="商品状态">
 						</el-table-column>
-						<el-table-column label="操作" align='center' width="311%">
+						<el-table-column prop="createTime" label="创建时间" align='center' width="259%">
+						</el-table-column>
+						<el-table-column label="操作" align='center' width="259%">
 							<template slot-scope="scope">
 								<el-button data-typeId='0'  @click='routerTo($event,scope.row)' type="text" size="small">查看</el-button>
 								<el-button data-typeId='1' @click='routerTo($event,scope.row)' type="text" size="small">编辑</el-button>
@@ -65,14 +70,12 @@
 
 <script>
 	export default {
-		name: 'accountAdmin',
+		name: 'goodsAdmin',
 		data() {
 			return {
 				name: '',
-				phone: '',
 				optionValue: '全部',
 				postName: '',
-				postPhone: '',
 				postOption: '全部',
 				options: [{
 						"label": '全部',
@@ -107,13 +110,12 @@
 
 			//查询
 			queryMsg: function() {
-				if (this.name == '' && this.phone == '' && this.optionValue == '全部') {
+				if (this.name == '' && this.optionValue == '全部') {
 					this.$alert.info('请输入查询条件')
 					return
 				} else {
 					this.index = 0
 					this.postName = this.name
-					this.postPhone = this.phone
 					this.postOption = this.optionValue
 					this.loadTableData()
 				}
@@ -146,7 +148,7 @@
 					query.id = row.id
 				}
 				this.$router.push({
-					path: '/accountOperation',
+					path: '/goodsOperation',
 					query: query
 				})
 			},
@@ -157,6 +159,7 @@
 			loadTableData: function() {
 				var accessToken = window.localStorage.accessToken
 				var isEnabled = ''
+				// alert(this.postOption)
 				if (this.postOption == '全部') {
 
 				} else if (this.postOption == '启用') {
@@ -164,13 +167,13 @@
 				} else {
 					isEnabled = 0
 				}
+				
 				var postData = {
 					"accessToken": accessToken,
 					"pageSize": this.pageSize,
 					"index": this.index,
 					"name": this.postName.replace(/\s+/g, ""),
-					"mobile": this.postPhone.replace(/\s+/g, ""),
-					"isEnabled": isEnabled
+					"goodsStatus": isEnabled
 				}
 				if (postData.name) {
 
@@ -178,19 +181,15 @@
 					delete postData['name']
 				}
 
-				if (postData.mobile) {
+				
 
-				} else {
-					delete postData['mobile']
-				}
-
-// 				if (postData.isEnabled) {
+// 				if (postData.goodsStatus) {
 // 
 // 				} else {
-// 					delete postData['isEnabled']
+// 					delete postData['goodsStatus']
 // 				}
 				// console.log(postData)
-				this.axios.post('/mgr/user/list', postData).then(res => {
+				this.axios.post('/mgr/product/material/list', postData).then(res => {
 					// console.log(res)
 					if (res.data.code == 200) {
 						var list = res.data.data.list
@@ -200,6 +199,9 @@
 							} else {
 								list[i].isEnabled = '停用'
 							}
+							
+							list[i].newPrice = '¥' + (Number(list[i].price)/100).toFixed(2)
+							
 						}
 						this.tableData = list
 						this.total = res.data.data.total
@@ -276,5 +278,24 @@
 
 	.el-pagination {
 		margin-top: 20px;
+	}
+	.imgDiv{
+		display: inline-block;
+		width: 60px;
+		height: 60px;
+	}
+	.imgDiv img{
+		display: block;
+		width: auto;
+		height: auto;
+		max-width: 100%;
+		height: 100%;
+		margin: auto;
+	}
+	.span{
+		vertical-align: top;
+		line-height: 60px;
+		display: inline-block;
+		
 	}
 </style>

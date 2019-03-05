@@ -2,25 +2,30 @@
 	<div>
 		<div class="header">
 			<el-breadcrumb separator-class="el-icon-arrow-right header-title">
-				<el-breadcrumb-item>账号管理</el-breadcrumb-item>
+				<el-breadcrumb-item>购买会员订单</el-breadcrumb-item>
 			</el-breadcrumb>
 			<div class="clear">
 				<div class="demo-input-suffix">
-					姓名：
-					<el-input placeholder="请输入姓名" v-model="name" maxLength='10' clearable>
+					订单编号：
+					<el-input placeholder="请输入订单编号" v-model="orderId" maxLength='' clearable>
 					</el-input>
 				</div>
 				<div class="demo-input-suffix">
-					手机号：
-					<el-input placeholder="请输入手机号" v-model="phone" maxLength='11' clearable>
+					下单手机号：
+					<el-input placeholder="请输入下单手机号" v-model="phone" maxLength='11' clearable>
 					</el-input>
 				</div>
 				<div class="demo-input-suffix">
-					状态：
-					<el-select v-model="optionValue" placeholder="请选择">
-						<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-						</el-option>
-					</el-select>
+					品牌名称：
+					<el-input placeholder="请输入品牌名称" v-model="brandName" maxLength='20' clearable>
+					</el-input>
+				</div>
+				<div class="demo-input-suffix">
+					<div class="block">
+						<span class="demonstration">支付日期：</span>
+						<el-date-picker :default-time="['00:00:00','23:59:00']" value-format="yyyy-MM-dd HH:mm:ss" unlink-panels v-model="payDate" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
+						</el-date-picker>
+					</div>
 				</div>
 			</div>
 
@@ -31,23 +36,27 @@
 			<div class="clear btns">
 				<el-button style='margin-right: 24px;' @click='queryMsg' type="primary fl">查询</el-button>
 				<el-button type="primary fl" @click='clearQuery'>清空查询条件</el-button>
-				<el-button type="primary fr" data-typeId='2' @click='routerTo($event)'>添加</el-button>
+				<!-- <el-button type="primary fr" data-typeId='2' @click='routerTo($event)'>添加</el-button> -->
 			</div>
 			<div class="table">
 				<template>
 					<el-table :data="tableData" v-loading="loading" style="width: 100%;display: inline-block;">
-						<el-table-column prop="name" label="姓名" row-class-name='test' align='center' width="311%">
+						<el-table-column prop="orderId" label="订单编号" row-class-name='test' align='center' width="222%">
 						</el-table-column>
-						<el-table-column prop="mobile" label="手机号" align='center' width="311%">
+						<el-table-column prop="payment" label="实付金额" align='center' width="222%">
 						</el-table-column>
-						<el-table-column prop="isEnabled" width="311%" align='center' label="状态">
+						<el-table-column prop="payWayText" label="支付方式" align='center' width="222%">
 						</el-table-column>
-						<el-table-column prop="updTime" label="最近登录时间" align='center' width="311%">
+						<el-table-column prop="submitUserMobile" label="手机号" align='center' width="222%">
 						</el-table-column>
-						<el-table-column label="操作" align='center' width="311%">
+						<el-table-column prop="timeEnd" label="支付时间" align='center' width="222%">
+						</el-table-column>
+						<el-table-column prop="poiName" label="品牌名称" align='center' width="222%">
+						</el-table-column>
+						<el-table-column label="操作" align='center' width="222%">
 							<template slot-scope="scope">
 								<el-button data-typeId='0'  @click='routerTo($event,scope.row)' type="text" size="small">查看</el-button>
-								<el-button data-typeId='1' @click='routerTo($event,scope.row)' type="text" size="small">编辑</el-button>
+								<!-- <el-button data-typeId='1' @click='routerTo($event,scope.row)' type="text" size="small">编辑</el-button> -->
 							</template>
 						</el-table-column>
 					</el-table>
@@ -65,28 +74,17 @@
 
 <script>
 	export default {
-		name: 'accountAdmin',
+		name: 'memberOrder',
 		data() {
 			return {
-				name: '',
+				orderId: '',
 				phone: '',
-				optionValue: '全部',
-				postName: '',
+				brandName:'',
+				payDate:'',
+				postOrderId:'',
 				postPhone: '',
-				postOption: '全部',
-				options: [{
-						"label": '全部',
-						'value': '全部'
-					},
-					{
-						"label": '启用',
-						'value': '启用'
-					},
-					{
-						"label": '停用',
-						'value': '停用'
-					},
-				],
+				postBrandName: '',
+				postPayDate:'',
 				tableData: '',
 				pageSize: 10,
 				index: 0,
@@ -107,30 +105,34 @@
 
 			//查询
 			queryMsg: function() {
-				if (this.name == '' && this.phone == '' && this.optionValue == '全部') {
+				
+				if (this.orderId.replace(/\s+/g, "") == '' && this.phone.replace(/\s+/g, "") == '' && this.brandName.replace(/\s+/g, "") == '' && this.payDate == '') {
 					this.$alert.info('请输入查询条件')
 					return
 				} else {
 					this.index = 0
-					this.postName = this.name
+					this.postOrderId = this.orderId
 					this.postPhone = this.phone
-					this.postOption = this.optionValue
+					this.postBrandName = this.brandName
+					this.postPayDate = this.payDate
 					this.loadTableData()
 				}
 			},
 
 			//清空查询条件
 			clearQuery: function() {
-				if (this.name == '' && this.phone == '' && this.optionValue == '全部') {
+				if (this.orderId.replace(/\s+/g, "") == '' && this.phone.replace(/\s+/g, "") == '' && this.brandName.replace(/\s+/g, "") == '' && this.payDate == '') {
 					this.$alert.info('暂无查询条件')
 					return
-				} 
-				this.name = ''
+				}
+				this.orderId = ''
 				this.phone = ''
-				this.optionValue = '全部'
-				this.postName = ''
+				this.brandName = ''
+				this.payDate = ''
+				this.postOrderId = ''
 				this.postPhone = ''
-				this.postOption = '全部'
+				this.postBrandName = ''
+				this.postPayDate = ''
 				this.index = 0
 				this.$alert.success('已清空')
 				this.loadTableData()
@@ -139,14 +141,13 @@
 			//跳转
 			routerTo: function(e,row) {
 				var query = {
-					type: e.target.dataset.typeid
+					
 				}
-				console.log(e)
 				if(row){
-					query.id = row.id
+					query.orderId = row.orderId
 				}
 				this.$router.push({
-					path: '/accountOperation',
+					path: '/showMemberOrderDetail',
 					query: query
 				})
 			},
@@ -168,39 +169,60 @@
 					"accessToken": accessToken,
 					"pageSize": this.pageSize,
 					"index": this.index,
-					"name": this.postName.replace(/\s+/g, ""),
-					"mobile": this.postPhone.replace(/\s+/g, ""),
-					"isEnabled": isEnabled
+					"poiName": this.postBrandName.replace(/\s+/g, ""),
+					"userMobile": this.postPhone.replace(/\s+/g, ""),
+					"orderId": this.postOrderId.replace(/\s+/g, "")
 				}
-				if (postData.name) {
+				if (postData.poiName) {
 
 				} else {
-					delete postData['name']
+					delete postData['poiName']
 				}
 
-				if (postData.mobile) {
+				if (postData.userMobile) {
 
 				} else {
-					delete postData['mobile']
+					delete postData['userMobile']
+				}
+				
+				if(postData.orderId){
+					
+				} else{
+					delete postData['orderId']
+				}
+				
+				if(this.postPayDate){
+					postData.startTime = this.postPayDate[0]
+					postData.endTime = this.postPayDate[1]
 				}
 
-// 				if (postData.isEnabled) {
-// 
-// 				} else {
-// 					delete postData['isEnabled']
-// 				}
+				
 				// console.log(postData)
-				this.axios.post('/mgr/user/list', postData).then(res => {
-					// console.log(res)
+				this.axios.post('/mgr/member/order/list', postData).then(res => {
+					console.log(res)
 					if (res.data.code == 200) {
 						var list = res.data.data.list
 						for (let i = 0; i < list.length; i++) {
-							if (list[i].isEnabled == 1) {
-								list[i].isEnabled = '启用'
-							} else {
-								list[i].isEnabled = '停用'
+							list[i].payment = '¥' + (Number(list[i].payment)/100).toFixed(2)
+							switch(Number(list[i].payWay)){
+								case 1:
+									list[i].payWayText = '银联'
+									break;
+								case 2:
+									list[i].payWayText = '支付宝'
+									break;
+								case 3:
+									list[i].payWayText = '微信支付'
+									break;
+								case 4:
+									list[i].payWayText = '余额支付'
+									break;
+								default :
+									list[i].payWayText = '未知'
+									break;
 							}
 						}
+						
 						this.tableData = list
 						this.total = res.data.data.total
 						this.loading = false
@@ -253,6 +275,7 @@
 		padding: 0 54px 50px;
 		margin-top: 21px;
 		box-sizing: border-box;
+		
 	}
 
 	.el-input {

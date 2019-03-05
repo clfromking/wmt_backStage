@@ -163,11 +163,11 @@
 			
 			//获取验证码
 			getCode:function(){
-				if(!(/^1[34578]\d{9}$/.test(this.phone))){ 
+				if(!(/^1[34578]\d{9}$/.test(this.phone1))){ 
 					this.$alert.error('手机号码格式不正确')
 				}
 				else{
-					this.axios.get('/mgr/sms/auth?mobile='+this.phone).then(res=>{
+					this.axios.get('/mgr/sms/auth?mobile='+this.phone1).then(res=>{
 						console.log(res)
 						if(res.data.code == 200){
 							for (let i = 60; i >= 0; i--) {
@@ -186,7 +186,7 @@
 			
 			getImgCode:function(){
 				this.axios.get('/mgr/img/code',{responseType: 'arraybuffer'}).then(res=>{
-					console.log(res)
+					console.log(res.data)
 					this.src = 'data:image/png;base64,' + btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
 				})
 			}

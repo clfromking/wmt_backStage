@@ -24,8 +24,21 @@ function info(msg,title,showClose){
 		showClose: showClose||false
 	})
 }
+
+function showModal(content,title,options){
+	var promise = new Promise((resolve,reject)=>{
+		Vue.prototype.$confirm(content,title,options).then(res=>{
+			  resolve(res)
+		  }).catch(error=>{
+			  reject(error)
+		  })
+	})
+	return promise
+}
+
 export{
 	error,
 	success,
-	info
+	info,
+	showModal
 }

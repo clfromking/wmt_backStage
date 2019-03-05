@@ -11,7 +11,7 @@
 				<span>手机号：</span>
 				<span class="content">{{phone}}</span>
 				<span>下单时间：</span>
-				<span class="content">{{createTime}}</span>
+				<span class="content">{{buyTime}}</span>
 				<span>支付时间：</span>
 				<span class="content">{{timeEnd}}</span>
 			</div>
@@ -31,7 +31,7 @@
 					<el-table :data="tableData" v-loading="loading" style="width: 100%;display: inline-block;">
 						<el-table-column prop="goodsName" label="商品" align='center' width="518%">
 						</el-table-column>
-						<el-table-column prop="unitPrice" label="单价" align='center' width="518%">
+						<el-table-column prop="payment" label="单价" align='center' width="518%">
 						</el-table-column>
 						<el-table-column prop="num" label="数量" align='center' width="518%">
 						</el-table-column>
@@ -71,14 +71,14 @@
 
 <script>
 	export default {
-		name: 'showOrderDetail',
+		name: 'showMemberOrderDetail',
 		data() {
 			return {
 				BreadcrumbText: '',
 				BreadcrumbUrl:'',
 				orderId:'20190118140296062001',
 				phone:'',
-				createTime:'',
+				buyTime:'',
 				timeEnd:'',
 				payWayText:'',
 				payStatus:'',
@@ -96,8 +96,8 @@
 			}
 		},
 		mounted: function() {
-			this.BreadcrumbText = '商品订单'
-			this.BreadcrumbUrl = '/goodsOrder'
+			this.BreadcrumbText = '购买会员订单'
+			this.BreadcrumbUrl = '/memberOrder'
 			this.loadOrderDetail()
 		},
 		methods: {
@@ -108,12 +108,12 @@
 			
 			loadOrderDetail:function(){
 				var localStorage=window.localStorage;
-				this.axios.post('/mgr/order/item',{"accessToken":localStorage.accessToken,"orderId":this.$route.query.orderId}).then(res=>{
+				this.axios.post('/mgr/member/order/detail',{"accessToken":localStorage.accessToken,"orderId":this.$route.query.orderId}).then(res=>{
 					console.log(res)
 					if(res.data.code == 200){
 						this.orderId = res.data.data.orderId
 						this.phone = res.data.data.submitUserMobile
-						this.createTime = res.data.data.createTime
+						this.buyTime = res.data.data.buyTime
 						this.timeEnd = res.data.data.timeEnd
 						switch(Number(res.data.data.payWay)){
 							case 1:
@@ -135,15 +135,31 @@
 						this.payStatus = res.data.data.payStatus
 						
 						this.total = (Number(res.data.data.total)/100).toFixed(2)
-						this.discounts = ((Number(res.data.data.total) - Number(res.data.data.payment))/100).toFixed(2)
-						this.payment = (Number(res.data.data.payment)/100).toFixed(2)
-						var totalNum = 0
-						for(let i =0 ; i<res.data.data.orderItemDataList.length;i++){
-							res.data.data.orderItemDataList[i].unitPrice = '¥' + (Number(res.data.data.orderItemDataList[i].unitPrice)/100).toFixed(2)
-							totalNum += res.data.data.orderItemDataList[i].num
+						this.payment = ((Number(res.data.data.total) - Number(res.data.data.discount))/100).toFixed(2)
+						this.discounts = (Number(res.data.data.discount)/100).toFixed(2)
+						
+						for(let i =0 ; i<res.data.data.list.length;i++){
+							res.data.data.list[i].payment = '¥' + (Number(res.data.data.list[i].payment)/100).toFixed(2)
+							res.data.data.list[i].num = 1
+							if (res.data.data.list[i].durationUnit=="DAY"){
+								res.data.data.list[i].goodsName = "日度会员卡"
+							}
+							else if (res.data.data.list[i].durationUnit == "WEEK"){
+								res.data.data.list[i].goodsName = "周度会员卡"
+							}
+							else if (res.data.data.list[i].durationUnit == "MONTH" && res.data.data.list[i].duration !==3 ){
+								res.data.data.list[i].goodsName = "月度会员卡"
+							}
+							else if (res.data.data.list[i].durationUnit == "MONTH" && res.data.data.list[i].duration == 3){
+								res.data.data.list[i].goodsName = "季度会员卡"
+							}
+							else if (res.data.data.list[i].durationUnit == "YEAR"){
+								res.data.data.list[i].goodsName = "年度会员卡"
+							}
 						}
-						this.totalNum = totalNum
-						this.tableData = res.data.data.orderItemDataList
+// 						alert()
+						this.totalNum = res.data.data.list.length
+						this.tableData = res.data.data.list
 						this.loading = false
 					}
 				})

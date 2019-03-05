@@ -10,17 +10,26 @@ import qs from 'qs'
 import echarts from 'echarts'
 import $ from 'jquery'
 import '../src/assets/css/common.css'
-import { error,success , info } from '@/assets/js/alert.js'
+import { error,success , info ,showModal } from '@/assets/js/alert.js'
+import { isZint ,validate} from '@/assets/js/computed.js'
 import { post } from '@/assets/js/ajax.js'
 
 
 
 Vue.prototype.$echarts = echarts 
-Vue.prototype.$alert =  { error,success ,info } 
+Vue.prototype.$alert =  { error,success ,info, showModal } 
+Vue.prototype.$computed = {isZint,validate}
 Vue.prototype.$ajax =  { post } 
-Vue.prototype.url = 'http://www.beta.com:8080'
+Vue.prototype.url = 'http://www.beta.com'
 
 
+// axios.defaults.withCredentials = true
+
+//生产需要打开
+Vue.config.productionTip = true   	
+
+
+// console.log(axios.defaults.withCredentials)
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.transformRequest = function (data) {
 	// Vue.http.options.emulateJSON = true;
@@ -29,12 +38,9 @@ axios.defaults.transformRequest = function (data) {
 	
 }
 
-
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
-	console.log(config)
-// 	
 	config.url = Vue.prototype.url + config.url
 	return config;
 }, function (error) {
@@ -47,6 +53,7 @@ axios.interceptors.response.use(function (response) {
   // 对响应数据做点什么
 	return response;
  }, function (error) {
+	 // console.log(111)
   // 对响应错误做点什么
 	return Promise.reject(error);
 });

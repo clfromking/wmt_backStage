@@ -41,8 +41,8 @@
 						"icon":"el-icon-tickets",
 						"text":"商品管理",
 						"children":[
-							{"text":"商品管理"},
-							{"text":"品类管理"},
+							{"text":"商品管理","path":'/goodsAdmin'},
+							// {"text":"品类管理"},
 						],
 					},
 					{
@@ -50,22 +50,22 @@
 						"text":"订单管理",
 						"children":[
 							{"text":"商品订单" , "path":'/goodsOrder'},
-							{"text":"购买会员订单"},
+							{"text":"购买会员订单" ,'path':'/memberOrder'},
 						],
 					},
 					{
 						"icon":"el-icon-service",
 						"text":"服务单管理",
 						"children":[
-							{"text":"免租金开店"},
-							{"text":"外卖运营"},
+							{"text":"免租金开店" , "path":'/freeShop'},
+							{"text":"外卖运营" , 'path':'/takeOutOperating'},
 						],
 					},
 					{
 						"icon":"el-icon-news",
 						"text":"营销管理",
 						"children":[
-							{"text":"0元抢购"},
+							{"text":"0元抢购",'path':'/zero'},
 							{"text":"邀请"},
 						],
 					},
@@ -73,7 +73,7 @@
 						"icon":"el-icon-star-off",
 						"text":"会员管理",
 						"children":[
-							{"text":"会员管理"},
+							{"text":"会员管理","path":'/memberAdmin'},
 						],
 					},
 					{

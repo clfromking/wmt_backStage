@@ -1,15 +1,43 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css' 
+import 'element-ui/lib/theme-chalk/index.css'
+//登录
 import login from '@/components/login.vue'
+//首页
 import index from '@/components/index.vue'
+//banner管理
 import banner from '@/components/banner.vue'
+//商品管理
+import goodsAdmin from '@/components/goodsAdmin.vue'
+import goodsOperation from '@/components/goodsOperation.vue'
+//订单管理 （商品订单部分）
 import goodsOrder from '@/components/goodsOrder.vue'
+import showOrderDetail from '@/components/showOrderDetail.vue'
+//
+//订单管理（购买会员订单部分）
+import memberOrder from '@/components/memberOrder.vue'
+import showMemberOrderDetail from '@/components/showMemberOrderDetail.vue'
+//
+//会员管理
+import memberAdmin from '@/components/memberAdmin.vue'
+import setMemberCard from '@/components/setMemberCard.vue'
+import editMemberCard from '@/components/editMemberCard.vue'
+import examineMemberRecord from '@/components/examineMemberRecord.vue'
+//
+//人员管理（账号管理）
 import accountAdmin from '@/components/accountAdmin.vue'
 import accountOperation from '@/components/accountOperation.vue'
-import showOrderDetail from '@/components/showOrderDetail.vue'
-
+//
+//服务单管理（订单管理）
+import freeShop from '@/components/freeShop.vue'
+import showFreeShopDetail from '@/components/showFreeShopDetail.vue'
+//服务单管理（外卖运营）
+import takeOutOperating	from '@/components/takeOutOperating.vue'
+import showTakeOutDetail from '@/components/showTakeOutDetail.vue'
+//营销管理 （0元）
+import zero from '@/components/zero.vue'
+import zeroOperation from '@/components/zeroOperation.vue'
 
 Vue.use(Router)
 Vue.use(ElementUI)
@@ -33,14 +61,85 @@ const router = new Router({
 					component:banner
 				},
 				{
-					name:'showOrderDetail',
-					path:'/showOrderDetail',
-					component:showOrderDetail
+					name:'goodsAdmin',
+					path:'/goodsAdmin',
+					component:goodsAdmin
+				},
+				{
+					name:'goodsOperation',
+					path:'/goodsOperation',
+					component:goodsOperation
 				},
 				{
 					name:'goodsOrder',
 					path:'/goodsOrder',
 					component:goodsOrder
+				},
+				{
+					name:'showOrderDetail',
+					path:'/showOrderDetail',
+					component:showOrderDetail
+				},
+				{
+					name:'memberOrder',
+					path:'/memberOrder',
+					component:memberOrder
+				},
+				{
+					name:'showMemberOrderDetail',
+					path:'/showMemberOrderDetail',
+					component:showMemberOrderDetail
+				},
+				{
+					name:'freeShop',
+					path:'/freeShop',
+					component:freeShop
+					
+				},
+				{
+					name:'showFreeShopDetail',
+					path:'/showFreeShopDetail',
+					component:showFreeShopDetail
+				},
+				{
+					name:'takeOutOperating',
+					path:'/takeOutOperating',
+					component:takeOutOperating
+				},
+				{
+					name:'showTakeOutDetail',
+					path:'/showTakeOutDetail',
+					component:showTakeOutDetail
+				},
+				{
+					name:'zero',
+					path:'/zero',
+					component:zero
+				},
+				{
+					name:'zeroOperation',
+					path:'/zeroOperation',
+					component:zeroOperation
+				},
+				{
+					name:'memberAdmin',
+					path:'/memberAdmin',
+					component:memberAdmin
+				},
+				{
+					name:'setMemberCard',
+					path:'/setMemberCard',
+					component:setMemberCard
+				},
+				{
+					name:'editMemberCard',
+					path:'/editMemberCard',
+					component:editMemberCard
+				},
+				{
+					name:'examineMemberRecord',
+					path:'/examineMemberRecord',
+					component:examineMemberRecord
 				},
 				{
 					name:'accountAdmin',
