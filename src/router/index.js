@@ -25,10 +25,6 @@ import setMemberCard from '@/components/setMemberCard.vue'
 import editMemberCard from '@/components/editMemberCard.vue'
 import examineMemberRecord from '@/components/examineMemberRecord.vue'
 //
-//人员管理（账号管理）
-import accountAdmin from '@/components/accountAdmin.vue'
-import accountOperation from '@/components/accountOperation.vue'
-//
 //服务单管理（订单管理）
 import freeShop from '@/components/freeShop.vue'
 import showFreeShopDetail from '@/components/showFreeShopDetail.vue'
@@ -38,6 +34,19 @@ import showTakeOutDetail from '@/components/showTakeOutDetail.vue'
 //营销管理 （0元）
 import zero from '@/components/zero.vue'
 import zeroOperation from '@/components/zeroOperation.vue'
+//财务管理
+import storeBalanceAccount from '@/components/storeBalanceAccount.vue'
+import storeBalanceListDetail from '@/components/storeBalanceListDetail.vue'
+import storeBalanceDetail from '@/components/storeBalanceDetail.vue'
+import storeBiddingAccount from '@/components/storeBiddingAccount.vue'
+import storeBiddingListDetail from '@/components/storeBiddingListDetail.vue'
+import storeBiddingDetail from '@/components/storeBiddingDetail.vue'
+import biddingPay from '@/components/biddingPay.vue'
+//人员管理（账号管理）
+import accountAdmin from '@/components/accountAdmin.vue'
+import accountOperation from '@/components/accountOperation.vue'
+//
+
 
 Vue.use(Router)
 Vue.use(ElementUI)
@@ -140,6 +149,41 @@ const router = new Router({
 					name:'examineMemberRecord',
 					path:'/examineMemberRecord',
 					component:examineMemberRecord
+				},
+				{
+					name:'storeBalanceAccount',
+					path:'/storeBalanceAccount',
+					component:storeBalanceAccount
+				},
+				{
+					name:'storeBalanceListDetail',
+					path:'/storeBalanceListDetail',
+					component:storeBalanceListDetail
+				},
+				{
+					name:'storeBalanceDetail',
+					path:'/storeBalanceDetail',
+					component:storeBalanceDetail
+				},
+				{
+					name:'storeBiddingAccount',
+					path:'/storeBiddingAccount',
+					component:storeBiddingAccount
+				},
+				{
+					name:'storeBiddingListDetail',
+					path:'/storeBiddingListDetail',
+					component:storeBiddingListDetail
+				},
+				{
+					name:'storeBiddingDetail',
+					path:'/storeBiddingDetail',
+					component:storeBiddingDetail
+				},
+				{
+					name:'biddingPay',
+					path:'/biddingPay',
+					component:biddingPay
 				},
 				{
 					name:'accountAdmin',

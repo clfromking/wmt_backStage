@@ -66,7 +66,6 @@
 						"text":"营销管理",
 						"children":[
 							{"text":"0元抢购",'path':'/zero'},
-							{"text":"邀请"},
 						],
 					},
 					{
@@ -80,9 +79,8 @@
 						"icon":"el-icon-sort",
 						"text":"财务管理",
 						"children":[
-							{"text":"商户余额账户"},
-							{"text":"商户分享金账户"},
-							{"text":"商户竞价账户"},
+							{"text":"商户余额账户" , "path":'/storeBalanceAccount'},
+							{"text":"商户竞价账户","path":"/storeBiddingAccount"},
 							{"text":"总部账户"},
 						],
 					},

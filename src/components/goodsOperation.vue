@@ -34,7 +34,7 @@
 			<el-form-item label="售价" prop="price">
 				<el-input :disabled="type==0" placeholder="请输入售价" maxLength='11' v-model="ruleForm.price" clearable></el-input>
 			</el-form-item>
-			<el-form-item label="库存" prop="stockNum">
+			<el-form-item label="库存" prop="status2">
 				<el-radio-group @change='radioChange' :disabled="type==0" v-model="ruleForm.status2">
 					<el-radio label="不限制"></el-radio>
 					<el-radio label="限制"></el-radio>
@@ -114,13 +114,11 @@
 						},
 						
 					],
-					stockNum:[{
-							required: true,
-							message: '请输入库存量',
-							trigger: 'blur'
-						},
-						
-					],
+					status2: [{
+						required: true,
+						message: '请选择一种库存设置',
+						trigger: 'change'
+					}],
 					
 					type: [{
 						type: 'array',
@@ -176,12 +174,21 @@
 							return
 						}
 						
-						if(this.$computed.isZint(this.ruleForm.stockNum) == false){
+						// console.log(this.ruleForm.status2)
+						var isEnabled = 0
+						if(this.ruleForm.status == '上架'){
+							isEnabled = 1
+						}
+						else{
+							isEnabled = 0
+						}
+						if(this.$computed.isZint(this.ruleForm.stockNum) == false && this.ruleForm.status2 == '限制'){
 							this.$alert.error('库存量格式不正确')
 							return
 						}
-						
-						this.$refs.upload.submit()
+						var userForm = {"productStatus":isEnabled,"name": this.ruleForm.name,"price":Number(this.ruleForm.price)*100,"stockNum":this.ruleForm.stockNum||0,"id":this.id}
+						console.log(userForm)
+						// this.$refs.upload.submit()
 					} 
 					else {
 						console.log('error submit!!');

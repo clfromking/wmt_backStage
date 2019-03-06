@@ -2,26 +2,33 @@
 	<div>
 		<div class="header">
 			<el-breadcrumb separator-class="el-icon-arrow-right header-title">
-				<el-breadcrumb-item>账号管理</el-breadcrumb-item>
+				<el-breadcrumb-item>商户余额账户</el-breadcrumb-item>
 			</el-breadcrumb>
+			<div class="allPrice">
+				<span>总余额：</span>
+				<span>{{totalPrice}}</span>
+				<span>现金账户总余额：</span>
+				<span>{{totalCashPrice}}</span>
+				<span>赠送账户总余额：</span>
+				<span>{{totalRedPrice}}</span>
+			</div>
 			<div class="clear">
 				<div class="demo-input-suffix">
-					姓名：
-					<el-input placeholder="请输入姓名" v-model="name" maxLength='10' clearable>
+					品牌名称：
+					<el-input placeholder="请输入品牌名称" v-model="brandName" maxLength='10' clearable>
 					</el-input>
 				</div>
 				<div class="demo-input-suffix">
-					手机号：
-					<el-input placeholder="请输入手机号" v-model="phone" maxLength='11' clearable>
+					老板姓名：
+					<el-input placeholder="请输入老板姓名" v-model="name" maxLength='10' clearable>
 					</el-input>
 				</div>
 				<div class="demo-input-suffix">
-					状态：
-					<el-select v-model="optionValue" placeholder="请选择">
-						<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-						</el-option>
-					</el-select>
+					老板手机号：
+					<el-input placeholder="请输入老板手机号" v-model="phone" maxLength='11' clearable>
+					</el-input>
 				</div>
+				
 			</div>
 
 
@@ -31,23 +38,28 @@
 			<div class="clear btns">
 				<el-button style='margin-right: 24px;' @click='queryMsg' type="primary fl">查询</el-button>
 				<el-button type="primary fl" @click='clearQuery'>清空查询条件</el-button>
-				<el-button type="primary fr" data-typeId='2' @click='routerTo($event)'>添加</el-button>
+				<!-- <el-button type="primary fr" data-typeId='2' @click='routerTo($event)'>添加</el-button> -->
 			</div>
 			<div class="table">
 				<template>
 					<el-table :data="tableData" v-loading="loading" style="width: 100%;display: inline-block;">
-						<el-table-column prop="name" label="姓名" row-class-name='test' align='center' width="311%">
+						<el-table-column prop="brandName" label="品牌名称" row-class-name='test' align='center' width="222%">
 						</el-table-column>
-						<el-table-column prop="mobile" label="手机号" align='center' width="311%">
+						<el-table-column prop="name" label="老板姓名" row-class-name='test' align='center' width="222%">
 						</el-table-column>
-						<el-table-column prop="isEnabled" width="311%" align='center' label="状态">
+						<el-table-column prop="mobile" label="老板手机号" align='center' width="222%">
 						</el-table-column>
-						<el-table-column prop="updTime" label="最近登录时间" align='center' width="311%">
+						<el-table-column prop="totalBalance" label="总金额" align='center' width="222%">
 						</el-table-column>
-						<el-table-column label="操作" align='center' width="311%">
+						<el-table-column prop="cashBalance" label="现金账户余额" align='center' width="222%">
+						</el-table-column>
+						<el-table-column prop="redBalance" width="222%" align='center' label="赠送账户余额">
+						</el-table-column>
+						
+						<el-table-column label="操作" align='center' width="222%">
 							<template slot-scope="scope">
-								<el-button data-typeId='0'  @click='routerTo($event,scope.row)' type="text" size="small">查看</el-button>
-								<el-button data-typeId='1' @click='routerTo($event,scope.row)' type="text" size="small">编辑</el-button>
+								<el-button  @click='routerTo(scope.row)' type="text" size="small">查看</el-button>
+								<!-- <el-button data-typeId='1' @click='routerTo($event,scope.row)' type="text" size="small">编辑</el-button> -->
 							</template>
 						</el-table-column>
 					</el-table>
@@ -65,33 +77,23 @@
 
 <script>
 	export default {
-		name: 'accountAdmin',
+		name: 'storeBalanceAccount',
 		data() {
 			return {
 				name: '',
 				phone: '',
-				optionValue: '全部',
+				brandName:'',
 				postName: '',
 				postPhone: '',
-				postOption: '全部',
-				options: [{
-						"label": '全部',
-						'value': '全部'
-					},
-					{
-						"label": '启用',
-						'value': '启用'
-					},
-					{
-						"label": '停用',
-						'value': '停用'
-					},
-				],
+				postBrandName:'',
 				tableData: '',
 				pageSize: 10,
 				index: 0,
 				total: 0,
-				loading: true
+				loading: true,
+				totalPrice:'',
+				totalCashPrice:'',
+				totalRedPrice:''
 			}
 		},
 		mounted: function() {
@@ -107,46 +109,48 @@
 
 			//查询
 			queryMsg: function() {
-				if (this.name == '' && this.phone == '' && this.optionValue == '全部') {
+				// console.log(this.brandName)
+				if (this.name == '' && this.phone == '' && this.brandName == '') {
 					this.$alert.info('请输入查询条件')
 					return
 				} else {
 					this.index = 0
 					this.postName = this.name
 					this.postPhone = this.phone
-					this.postOption = this.optionValue
+					this.postBrandName = this.brandName
 					this.loadTableData()
 				}
 			},
 
 			//清空查询条件
 			clearQuery: function() {
-				if (this.name == '' && this.phone == '' && this.optionValue == '全部') {
+				if (this.name == '' && this.phone == '' && this.brandName == '') {
 					this.$alert.info('暂无查询条件')
 					return
 				} 
 				this.name = ''
 				this.phone = ''
-				this.optionValue = '全部'
+				this.brandName = ''
 				this.postName = ''
 				this.postPhone = ''
-				this.postOption = '全部'
+				this.postBrandName = ''
 				this.index = 0
 				this.$alert.success('已清空')
 				this.loadTableData()
 			},
 
 			//跳转
-			routerTo: function(e,row) {
+			routerTo: function(row) {
 				var query = {
-					type: e.target.dataset.typeid
+					
 				}
-				console.log(e)
+// 				console.log(row.id)
+// 				return
 				if(row){
 					query.id = row.id
 				}
 				this.$router.push({
-					path: '/accountOperation',
+					path: '/storeBalanceListDetail',
 					query: query
 				})
 			},
@@ -157,20 +161,13 @@
 			loadTableData: function() {
 				var accessToken = window.localStorage.accessToken
 				var isEnabled = ''
-				if (this.postOption == '全部') {
-
-				} else if (this.postOption == '启用') {
-					isEnabled = 1
-				} else {
-					isEnabled = 0
-				}
 				var postData = {
 					"accessToken": accessToken,
 					"pageSize": this.pageSize,
 					"index": this.index,
 					"name": this.postName.replace(/\s+/g, ""),
+					"branchName":this.postBrandName.replace(/\s+/g, ""),
 					"mobile": this.postPhone.replace(/\s+/g, ""),
-					"isEnabled": isEnabled
 				}
 				if (postData.name) {
 
@@ -183,26 +180,33 @@
 				} else {
 					delete postData['mobile']
 				}
-
+				
+				if(postData.branchName){
+					
+				} else{
+					delete postData['branchName']
+				}
+				
 // 				if (postData.isEnabled) {
 // 
 // 				} else {
 // 					delete postData['isEnabled']
 // 				}
 				// console.log(postData)
-				this.axios.post('/mgr/user/list', postData).then(res => {
+				this.axios.post('/mgr/poi/account/list', postData).then(res => {
 					// console.log(res)
 					if (res.data.code == 200) {
 						var list = res.data.data.list
 						for (let i = 0; i < list.length; i++) {
-							if (list[i].isEnabled == 1) {
-								list[i].isEnabled = '启用'
-							} else {
-								list[i].isEnabled = '停用'
-							}
+							list[i].redBalance = '¥' + (Number(list[i].curRedBalance)/100).toFixed(2)
+							list[i].totalBalance = '¥' + (Number(list[i].curBalance)/100).toFixed(2)
+							list[i].cashBalance = '¥' + ((Number(list[i].curBalance)-Number(list[i].curRedBalance))/100).toFixed(2)
 						}
 						this.tableData = list
 						this.total = res.data.data.total
+						this.totalPrice = '¥' + (Number(res.data.data.sumCurBalance)/100).toFixed(2)
+						this.totalRedPrice = '¥' + (Number(res.data.data.sumCurRedBalance)/100).toFixed(2)
+						this.totalCashPrice = '¥' + ((Number(res.data.data.sumCurBalance)-Number(res.data.data.sumCurRedBalance))/100).toFixed(2)
 						this.loading = false
 						if(list.length <= 0){
 							this.$alert.info('暂无数据')
@@ -220,7 +224,7 @@
 
 <style scoped>
 	.header {
-		height: 168px;
+		height: 228px;
 		background: #fff;
 		border-radius: 5px;
 		box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
@@ -276,5 +280,14 @@
 
 	.el-pagination {
 		margin-top: 20px;
+	}
+	.allPrice{
+		text-align: left;
+		padding-left: 50px;
+		color: #5d5d5d;
+		margin: 40px 0 10px;
+	}
+	.allPrice span:nth-child(2n){
+		margin-right: 50px;
 	}
 </style>
