@@ -20,10 +20,10 @@ Vue.prototype.$echarts = echarts
 Vue.prototype.$alert =  { error,success ,info, showModal } 
 Vue.prototype.$computed = {isZint,validate}
 Vue.prototype.$ajax =  { post } 
-Vue.prototype.url = 'http://www.beta.com'
+Vue.prototype.url = 'http://192.168.0.198'
 
 
-// axios.defaults.withCredentials = true
+axios.defaults.withCredentials = true
 
 //生产需要打开
 Vue.config.productionTip = true   	

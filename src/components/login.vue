@@ -111,6 +111,7 @@
 								var localStorage=window.localStorage;
 								localStorage.accessToken = res.data.data.accessToken
 								localStorage.islogin = true
+								localStorage.name  = res.data.data.name
 								this.$router.push({path:'/index'})
 							},1500)
 						}
@@ -145,6 +146,7 @@
 							setTimeout(()=>{
 								var localStorage=window.localStorage;
 								localStorage.accessToken = res.data.data.accessToken
+								localStorage.name  = res.data.data.name
 								localStorage.islogin = true
 								this.$router.push({path:'/index'})
 							},1500)

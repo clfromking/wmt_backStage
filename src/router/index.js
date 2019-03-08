@@ -42,10 +42,18 @@ import storeBiddingAccount from '@/components/storeBiddingAccount.vue'
 import storeBiddingListDetail from '@/components/storeBiddingListDetail.vue'
 import storeBiddingDetail from '@/components/storeBiddingDetail.vue'
 import biddingPay from '@/components/biddingPay.vue'
-//人员管理（账号管理）
+import headAccount from '@/components/headAccount.vue'
+import headAccountDetail from '@/components/headAccountDetail.vue'
+import headAccountPay from '@/components/headAccountPay.vue'
+//人员管理
 import accountAdmin from '@/components/accountAdmin.vue'
 import accountOperation from '@/components/accountOperation.vue'
+import roleAdmin from '@/components/roleAdmin.vue'
+import roleOperation from '@/components/roleOperation.vue'
 //
+
+//修改密码
+import changePassword from '@/components/changePassword.vue'
 
 
 Vue.use(Router)
@@ -62,7 +70,7 @@ const router = new Router({
 			name:'index',
 			path:'/index',
 			component:index,
-			// redirect: {name: 'banner'}, // 跳转到下一级第一个
+			redirect: {name: 'banner'}, // 跳转到下一级第一个
 			children:[
 				{
 					name:'banner',
@@ -186,6 +194,21 @@ const router = new Router({
 					component:biddingPay
 				},
 				{
+					name:'headAccount',
+					path:'/headAccount',
+					component:headAccount
+				},
+				{
+					name:'headAccountDetail',
+					path:'/headAccountDetail',
+					component:headAccountDetail
+				},
+				{
+					name:'headAccountPay',
+					path:'/headAccountPay',
+					component:headAccountPay
+				},
+				{
 					name:'accountAdmin',
 					path:'/accountAdmin',
 					component:accountAdmin,
@@ -197,7 +220,22 @@ const router = new Router({
 					name:'accountOperation',
 					path:'/accountOperation',
 					component:accountOperation
-				}
+				},
+				{
+					name:'roleAdmin',
+					path:'/roleAdmin',
+					component:roleAdmin
+				},
+				{
+					name:'roleOperation',
+					path:'/roleOperation',
+					component:roleOperation
+				},
+				{
+					name:'changePassword',
+					path:'/changePassword',
+					component:changePassword
+				},
 			]
 		}
 	]
@@ -206,7 +244,7 @@ const router = new Router({
 // 全局路由守卫
 router.beforeEach((to, from, next) => {
 	var localStorage=window.localStorage;
-	if(localStorage.islogin){	 //登录了 正常
+	if(localStorage.islogin && localStorage.accessToken){	 //登录了 正常
 		next()
 	}
 	else{		//没登陆

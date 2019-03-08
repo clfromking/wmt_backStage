@@ -135,7 +135,8 @@
 				brandName:'',
 				bossName:'',
 				bossPhone:'',
-				userId:''
+				userId:'',
+				allTableData:''
 			}
 		},
 		mounted: function() {
@@ -223,8 +224,6 @@
 				var postData = {
 					"poiId":this.$route.query.id,
 					"accessToken": accessToken,
-					"pageSize": this.pageSize,
-					"index": this.index,
 					"orderId": this.postOrderId.replace(/\s+/g, "")
 				}
 				if (this.postOption == '全部') {
@@ -250,8 +249,8 @@
 				}
 				
 				if(this.postPayDate){
-					postData.startTime = this.postPayDate[0]
-					postData.endTime = this.postPayDate[1]
+					postData.timeStart = this.postPayDate[0]
+					postData.timeEnd = this.postPayDate[1]
 				}
 
 				
@@ -272,7 +271,15 @@
 						this.brandName = res.data.data.branchName
 						this.totalPrice = '¥' + (Number(res.data.data.curBiddingBalance)/100).toFixed(2)
 						this.userId = res.data.data.userId
-						this.tableData = list
+						var showList = []
+						this.allTableData = JSON.parse(JSON.stringify(list))
+						for(let i = 0;i<this.pageSize;i++){
+							if(this.allTableData[(this.pageSize*this.index)+i]){
+								showList.push(this.allTableData[(this.pageSize*this.index)+i])
+							}
+							
+						}
+						this.tableData = showList
 						this.total = res.data.data.total
 						this.loading = false
 						if(list.length <= 0){

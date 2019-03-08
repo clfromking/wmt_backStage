@@ -2,9 +2,8 @@
 	<div class="body">
 		
 		<el-breadcrumb separator-class="el-icon-arrow-right header-title">
-			<el-breadcrumb-item :to="{path:'/storeBiddingAccount'}">商户竞价账户</el-breadcrumb-item>
-			<el-breadcrumb-item :to="{path:'/storeBiddingListDetail?id='+this.$route.query.poiId}">账户详情</el-breadcrumb-item>
-			<el-breadcrumb-item>竞价花费</el-breadcrumb-item>
+			<el-breadcrumb-item :to="{path:'/headAccount'}">总部账户</el-breadcrumb-item>
+			<el-breadcrumb-item>{{title}}</el-breadcrumb-item>
 		</el-breadcrumb>
 		
 		<div class="allPrice">
@@ -13,8 +12,8 @@
 		</div>
 		
 		<el-form label-position='left' :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-			<el-form-item label="竞价花费" prop="price">
-				<el-input  placeholder="请输入竞价花费金额" maxLength='20' v-model="ruleForm.price" clearable></el-input>
+			<el-form-item :label="title+'金额'" prop="price">
+				<el-input  :placeholder="'请输入'+title+'金额'" maxLength='20' v-model="ruleForm.price" clearable></el-input>
 			</el-form-item>
 			<el-form-item label="备注" prop="desc">
 				<el-input maxLength='200' placeholder='非必填，最多200个字' type="textarea" v-model="ruleForm.desc"></el-input>
@@ -31,23 +30,26 @@
 
 <script>
 	export default{
-		name:'biddingPay',
+		name:'headAccountPay',
 		data() {
 			return {
+				title:'',
 				ruleForm: {
 				  price: '',
 				  desc: '',
 				},
 				rules: {
 				  price: [
-					{ required: true, message: '请输入竞价花费金额', trigger: 'blur' },
+					{ required: true, message: '请输入'+'金额', trigger: 'blur' },
 					{ min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
 				  ], 
 				},
-				totalPrice:''
+				totalPrice:'',
+				
 			}
 		},
 		mounted:function(){
+			this.title = Number(this.$route.query.type)==0?"充值":"提现"
 			this.totalPrice = '¥' + (Number(this.$route.query.price)/100).toFixed(2)
 		},
 		methods: {
@@ -59,21 +61,25 @@
 							this.$alert.error('价格格式不正确')
 							return
 						}
-						
-						if((Number(this.ruleForm.price)*100) > Number(this.$route.query.price)){
-							this.$alert.error('账户余额不足')
-							return
+						if(this.title == '提现'){
+							if((Number(this.ruleForm.price)*100) > Number(this.$route.query.price)){
+								this.$alert.error('账户余额不足')
+								return
+							}
 						}
+						
 						
 						var postData = {
 							"accessToken":window.localStorage.accessToken,
-							"poiId":this.$route.query.poiId,
+							// "poiId":this.$route.query.poiId,
 							"amount":Number(this.ruleForm.price)*100,
 							"summary":this.ruleForm.desc,
-							"userId":this.$route.query.userId,
-							"name":this.$route.query.name
+							// "userId":this.$route.query.userId,
+							// "name":this.$route.query.name
 						}
-						this.axios.post('/mgr/bidding/consume/save',postData).then(res=>{
+						var url = Number(this.$route.query.type)==0?"/mgr/account/recharge/save":"/mgr/account/consume/save"
+						
+						this.axios.post(url,postData).then(res=>{
 							console.log(res)
 							if(res.data.code == 200){
 								this.$alert.success('提交成功')

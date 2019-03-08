@@ -653,7 +653,7 @@
 		right: 0;
 		margin: auto;
 		background: #000;
-		opacity: 0.2;
+		opacity: 0.29;
 		z-index: 9;
 	}
 	.el-transfer{

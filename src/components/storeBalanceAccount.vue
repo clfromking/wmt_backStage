@@ -4,14 +4,14 @@
 			<el-breadcrumb separator-class="el-icon-arrow-right header-title">
 				<el-breadcrumb-item>商户余额账户</el-breadcrumb-item>
 			</el-breadcrumb>
-			<div class="allPrice">
+			<!-- <div class="allPrice">
 				<span>总余额：</span>
 				<span>{{totalPrice}}</span>
 				<span>现金账户总余额：</span>
 				<span>{{totalCashPrice}}</span>
 				<span>赠送账户总余额：</span>
 				<span>{{totalRedPrice}}</span>
-			</div>
+			</div> -->
 			<div class="clear">
 				<div class="demo-input-suffix">
 					品牌名称：
@@ -33,7 +33,31 @@
 
 
 		</div>
-
+		
+		<div class="prices-div">
+			<div class="price-item">
+				<p class="price-item-title">总金额</p>
+				<p class="moneys">{{totalPrice}}</p>
+				<p class="alts">总金额</p>
+			</div>
+			<div class="price-item">
+				<p class="price-item-title">现金账户总余额</p>
+				<div class="moneys specialMoneys">{{totalCashPrice}}</div>
+				<div class="plan-div fr">
+					<p>赠送账户总余额</p>
+					<p>{{totalRedPrice}}</p>
+					<div class="outPlan">
+						<div class="inPlan"></div>
+					</div>
+				</div>
+			</div>
+			<div class="price-item">
+				<p class="price-item-title">赠送账户总余额</p>
+				<p class="moneys">{{totalRedPrice}}</p>
+				<p class="alts">赠送账户总余额</p>
+			</div>
+		</div>
+		
 		<div class="body">
 			<div class="clear btns">
 				<el-button style='margin-right: 24px;' @click='queryMsg' type="primary fl">查询</el-button>
@@ -224,7 +248,7 @@
 
 <style scoped>
 	.header {
-		height: 228px;
+		height: 168px;
 		background: #fff;
 		border-radius: 5px;
 		box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
@@ -289,5 +313,79 @@
 	}
 	.allPrice span:nth-child(2n){
 		margin-right: 50px;
+	}
+	.prices-div{
+		display: flex;
+		height: 300px;
+		
+		margin-top: 20px;
+	}
+	.price-item{
+		width: 100%;
+		height: 300px;
+		background: #fff;
+		border-radius: 5px;
+		box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+		margin-right: 20px;
+		padding: 0 22px;
+		text-align: left;
+	}
+	.price-item:nth-child(3){
+		margin-right: 0;
+	}
+	.price-item-title{
+		height: 74px;
+		line-height: 74px;
+		font-size: 16px;
+		color: #5D5D5D;
+		font-weight: bold;
+		text-align: left;
+		padding-left: 12px;
+		border-bottom: 1px solid #e6e6e6;
+	}
+	.moneys{
+		font-size: 40px;
+		color: #5D5D5D;
+		text-align: left;
+		padding-left: 12px;
+		margin-top: 50px;
+	}
+	.alts{
+		font-size: 14px;
+		color: #5D5D5D;
+		padding-left: 18px;
+		text-align: left;
+		margin-top: 24px;
+	}
+	.specialMoneys{
+		display: inline-block;
+	}
+	.plan-div{
+		width: 50%;
+		height: 225px;
+	}
+	.plan-div p:nth-child(1){
+		font-size: 14px;
+		color: #5D5D5D;
+		padding-top: 38px;
+	}
+	.plan-div p:nth-child(2){
+		font-size: 30px;
+		color: #5D5D5D;
+		margin-top: 5px;
+	}
+	.outPlan{
+		width: 217px;
+		height: 6px;
+		background: #E8E8E8;
+		border-radius: 3px;
+		margin-top: 16px;
+	}
+	.inPlan{
+		width: 90%;
+		height: 6px;
+		background-image: linear-gradient(90deg, #6091FE 0%, #6DABFD 100%);
+		border-radius: 3px;
+		
 	}
 </style>
