@@ -1,14 +1,24 @@
 <template>
 	<div class="body">
 		<el-breadcrumb separator-class="el-icon-arrow-right header-title">
-			<el-breadcrumb-item :to="{ path: '/goodsAdmin' }">商品管理</el-breadcrumb-item>
+			<el-breadcrumb-item :to="{ path: '/banner' }">banner管理</el-breadcrumb-item>
 			<el-breadcrumb-item>{{BreadcrumbText}}</el-breadcrumb-item>
 		</el-breadcrumb>
 		<el-form label-position='left' :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-			<el-form-item label="商品名称" prop="name">
-				<el-input :disabled="type==0" placeholder="请输入商品名称" maxLength='20' v-model="ruleForm.name" clearable></el-input>
+			<el-form-item label="banner名称" prop="name">
+				<el-input :disabled="type==0" placeholder="请输入banner名称" maxLength='20' v-model="ruleForm.name" clearable></el-input>
 			</el-form-item>
-			<el-form-item  label='商品图片'>
+			<el-form-item label="状态" prop="status">
+				<el-radio-group :disabled="type==0" v-model="ruleForm.status">
+					<el-radio label="启用"></el-radio>
+					<el-radio label="停用"></el-radio>
+				</el-radio-group>
+			</el-form-item>
+			<el-form-item label='日期'  prop='showDate'>
+				<el-date-picker :disabled="type==0" value-format="yyyy-MM-dd" unlink-panels v-model="ruleForm.showDate" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
+				</el-date-picker>
+			</el-form-item>
+			<el-form-item  label='banner图片'>
 				<el-upload
 				  action="http://192.168.0.198/mgr/img/upload"
 				  list-type="picture-card"
@@ -31,39 +41,12 @@
 				</el-dialog>
 				
 			</el-form-item>
-			<el-form-item label="售价" prop="price">
-				<el-input :disabled="type==0" placeholder="请输入售价" maxLength='11' v-model="ruleForm.price" clearable></el-input>
+			<el-form-item label="跳转" prop="link">
+				<el-input :disabled="type==0" placeholder="请输入跳转路由" maxLength='11' v-model="ruleForm.link" clearable></el-input>
 			</el-form-item>
-			<el-form-item label="库存" prop="status2">
-				<el-radio-group @change='radioChange' :disabled="type==0" v-model="ruleForm.status2">
-					<el-radio label="不限制"></el-radio>
-					<el-radio label="限制"></el-radio>
-				</el-radio-group><br>
-				
-				<el-input v-if='isShowStockNum' :disabled="type==0" placeholder="请输入库存量" maxLength='11' v-model="ruleForm.stockNum" clearable></el-input>
+			<el-form-item label="排序" prop="showSeq">
+				<el-input :disabled="type==0" placeholder="请输入排序序号" maxLength='11' v-model="ruleForm.showSeq" clearable></el-input>
 			</el-form-item>
-			<el-form-item label="上架状态" prop="status">
-				<el-radio-group :disabled="type==0" v-model="ruleForm.status">
-					<el-radio label="上架"></el-radio>
-					<el-radio label="下架"></el-radio>
-				</el-radio-group>
-			</el-form-item>
-			<!-- <el-form-item label="角色" prop="type">
-				<el-checkbox-group v-model="ruleForm.type">
-					<el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox><br>
-					<el-checkbox label="地推活动" name="type"></el-checkbox><br>
-					<el-checkbox label="线下主题活动" name="type"></el-checkbox><br>
-					<el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-					<el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox><br>
-					<el-checkbox label="地推活动" name="type"></el-checkbox><br>
-					<el-checkbox label="线下主题活动" name="type"></el-checkbox><br>
-					<el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-					<el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox><br>
-					<el-checkbox label="地推活动" name="type"></el-checkbox><br>
-					<el-checkbox label="线下主题活动" name="type"></el-checkbox><br>
-					<el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-				</el-checkbox-group>
-			</el-form-item> -->
 			<el-form-item>
 				<el-button v-if='type!=0' type="primary" @click="submitForm('ruleForm')">{{type==1?"保存":"立即添加"}}</el-button>
 				<el-button v-if='type!=0' @click="resetForm('ruleForm')">{{type==1?"取消":"重置"}}</el-button>
@@ -75,7 +58,7 @@
 
 <script>
 	export default {
-		name: 'goodsOperation',
+		name: 'bannerOperation',
 		data() {
 			return {
 				BreadcrumbText: '',
@@ -88,16 +71,16 @@
 				isShowStockNum:false,
 				ruleForm: {
 					name: '',
-					price: '',
-					stockNum:'',
+					link:'',
+					showSeq:'',
+					showDate:'',
 					type: [],
-					status: '上架',
-					status2:'不限制',
+					status: '启用',
 				},			
 				rules: {
 					name: [{
 							required: true,
-							message: '请输入商品名称',
+							message: '请输入banner名称',
 							trigger: 'blur'
 						},
 						{
@@ -107,19 +90,27 @@
 							trigger: 'blur'
 						}
 					],
-					price: [{
+					link: [{
 							required: true,
-							message: '请输入售价',
+							message: '请输入跳转',
 							trigger: 'blur'
 						},
 						
 					],
-					status2: [{
-						required: true,
-						message: '请选择一种库存设置',
-						trigger: 'change'
-					}],
-					
+					showDate:[{
+							required: true,
+							message: '请选择日期',
+							trigger: 'blur'
+						},
+						
+					],
+					showSeq:[
+						{
+							required: true,
+							message: '请输入排序序号',
+							trigger: 'blur'
+						},
+					],
 					type: [{
 						type: 'array',
 						required: true,
@@ -128,7 +119,7 @@
 					}],
 					status: [{
 						required: true,
-						message: '请选择一种上架状态',
+						message: '请选择一种状态',
 						trigger: 'change'
 					}],
 					dialogImageUrl:[
@@ -146,11 +137,11 @@
 			switch (Number(this.$route.query.type)) {
 				case 0: //查看
 					this.BreadcrumbText = '查看'
-					this.loadGoodsDetail()
+					this.loadBannerDetail()
 					break;
 				case 1: //编辑
 					this.BreadcrumbText = '编辑'
-					this.loadGoodsDetail()
+					this.loadBannerDetail()
 					break;
 				case 2: //添加
 					this.BreadcrumbText = '添加'
@@ -170,30 +161,16 @@
 							return
 						}
 						
-						if(this.$computed.validate(this.ruleForm.price) == false){
-							this.$alert.error('价格格式不正确')
+						if(this.ruleForm.showDate == ''){
+							this.$alert.error('请先输入日期')
 							return
 						}
 						
-						// console.log(this.ruleForm.status2)
-						var isEnabled = 0
-						if(this.ruleForm.status == '上架'){
-							isEnabled = 1
-						}
-						else{
-							isEnabled = 0
-						}
-						if(this.$computed.isZint(this.ruleForm.stockNum) == false && this.ruleForm.status2 == '限制'){
-							this.$alert.error('库存量格式不正确')
-							return
-						}
-						// var userForm = {"productStatus":isEnabled,"name": this.ruleForm.name,"price":Number(this.ruleForm.price)*100,"stockNum":this.ruleForm.stockNum||0,"id":this.id}
 						if(this.$refs.upload._data.uploadFiles[0].url.indexOf('blob:') > -1){
-							console.log(1)
+							
 							this.$refs.upload.submit()
 						}
 						else{
-							console.log(2)
 							this.submitMsg(this.$refs.upload._data.uploadFiles[0].url)
 						}
 						
@@ -221,27 +198,26 @@
 				this.$router.back(-1)
 			},
 			
-			loadGoodsDetail:function(){
+			loadBannerDetail:function(){
 				var localStorage=window.localStorage;
-				this.axios.post('/mgr/product/material/query/detail',{"accessToken":localStorage.accessToken,"id":this.$route.query.id}).then(res=>{
+				this.axios.post('/mgr/banner/detail',{"accessToken":localStorage.accessToken,"id":this.$route.query.id}).then(res=>{
 					console.log(res)
 					if(res.data.code == 200){
-						this.ruleForm.name = res.data.data.name
-						this.ruleForm.price = (Number(res.data.data.price)/100)
-						this.ruleForm.stockNum = res.data.data.stockNum
+						this.ruleForm.name = res.data.data.data.name
+						this.ruleForm.showSeq = res.data.data.data.showSeq
+						this.ruleForm.link = res.data.data.data.link
 						var listArr = this.listArr
-						listArr.push({url:res.data.data.coverImg})
-// 						listArr.name = 'asdasd'
-// 						listArr.url = res.data.data.coverImg
+						listArr.push({url:res.data.data.data.imgUrl})
 						console.log(listArr)
 						this.listArr = listArr
+						this.ruleForm.showDate = [res.data.data.data.expiredStart,res.data.data.data.expiredEnd]
 						
-						this.id = res.data.data.id
-						if(Number(res.data.data.isEnabled) == 1){
-							this.ruleForm.status = '上架'
+						this.id = res.data.data.data.id
+						if(Number(res.data.data.data.isEnabled) == 1){
+							this.ruleForm.status = '启用'
 						}
 						else{
-							this.ruleForm.status = '下架'
+							this.ruleForm.status = '停用'
 						}
 					}
 				})
@@ -329,7 +305,7 @@
 			submitMsg:function(imgUrl){
 				var localStorage = window.localStorage
 				var isEnabled = 0
-				if(this.ruleForm.status == '上架'){
+				if(this.ruleForm.status == '启用'){
 					isEnabled = 1
 				}
 				else{
@@ -338,17 +314,17 @@
 				if(Number(this.type) == 1){
 					
 					var userForm = {
-						"status":isEnabled,
+						"isEnabled":isEnabled,
 						"name": this.ruleForm.name,
-						"price":Number(this.ruleForm.price)*100,
-						"stockNum":this.ruleForm.stockNum,
+						"showSeq":this.ruleForm.showSeq,
+						"link":this.ruleForm.link,
+						"expiredStart":this.ruleForm.showDate[0],
+						"expiredEnd":this.ruleForm.showDate[1],
 						"id":this.id,
-						"coverImg":imgUrl,
-						"firstLevel":0,
-						"secondLevel":0,
-						"thirdLevel":0
+						"imgUrl":imgUrl,
+						
 					}
-					var url = '/mgr/product/material/edit?accessToken='+localStorage.accessToken
+					var url = '/mgr/banner/edit?accessToken='+localStorage.accessToken
 					//复杂的表单提交用封装的ajax,而不用axios
 					this.$ajax.post(url,userForm).then(res=>{
 						if(res.code == 200){
@@ -362,16 +338,15 @@
 				}
 				else{
 					var userForm = {
-						"status":isEnabled,
+						"isEnabled":isEnabled,
 						"name": this.ruleForm.name,
-						"price":Number(this.ruleForm.price)*100,
-						"stockNum":this.ruleForm.stockNum,
-						"coverImg":imgUrl,
-						"firstLevel":0,
-						"secondLevel":0,
-						"thirdLevel":0
+						"showSeq":this.ruleForm.showSeq,
+						"link":this.ruleForm.link,
+						"expiredStart":this.ruleForm.showDate[0],
+						"expiredEnd":this.ruleForm.showDate[1],
+						"imgUrl":imgUrl,
 					}
-					var url = '/mgr/product/material/save?accessToken='+localStorage.accessToken
+					var url = '/mgr/banner/add?accessToken='+localStorage.accessToken
 					this.$ajax.post(url,userForm).then(res=>{
 						if(res.code == 200){
 							this.$alert.success('添加成功')

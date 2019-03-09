@@ -20,7 +20,7 @@
 				<div class="demo-input-suffix">
 					<div class="block">
 						<span class="demonstration">显示日期：</span>
-						<el-date-picker :default-time="['00:00:00','23:59:59']" value-format="yyyy-MM-dd HH:mm:ss" unlink-panels v-model="showDate" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
+						<el-date-picker value-format="yyyy-MM-dd" unlink-panels v-model="showDate" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
 						</el-date-picker>
 					</div>
 				</div>
@@ -46,18 +46,28 @@
 			<div class="table">
 				<template>
 					<el-table :data="tableData" v-loading="loading" style="width: 100%;display: inline-block;">
-						<el-table-column prop="name" label="姓名" row-class-name='test' align='center' width="311%">
+						<el-table-column prop="name" label="banner名称" row-class-name='test' align='center' width="222%">
 						</el-table-column>
-						<el-table-column prop="mobile" label="手机号" align='center' width="311%">
+						<el-table-column  label="图片" row-class-name='test' align='center' width="222%">
+							<template slot-scope="scope">
+								<div class="imgDiv">
+									<img :src="scope.row.imgUrl" alt="">
+								</div>
+							</template>
 						</el-table-column>
-						<el-table-column prop="isEnabled" width="311%" align='center' label="状态">
+						<el-table-column prop="showDate" label="显示日期" row-class-name='test' align='center' width="222%">
 						</el-table-column>
-						<el-table-column prop="updTime" label="最近登录时间" align='center' width="311%">
+						<el-table-column prop="isEnabled" label="状态" align='center' width="222%">
 						</el-table-column>
-						<el-table-column label="操作" align='center' width="311%">
+						<el-table-column prop="createDate" width="222%" align='center' label="创建时间">
+						</el-table-column>
+						<el-table-column prop="showSeq" label="排序" align='center' width="222%">
+						</el-table-column>
+						<el-table-column label="操作" align='center' width="222%">
 							<template slot-scope="scope">
 								<el-button data-typeId='0' @click='routerTo($event,scope.row)' type="text" size="small">查看</el-button>
 								<el-button data-typeId='1' @click='routerTo($event,scope.row)' type="text" size="small">编辑</el-button>
+								<el-button @click='deleteBanner(scope.row)' type="text" size="small">删除</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -79,13 +89,13 @@
 		data() {
 			return {
 				bannerName: '',
-				phone: '',
 				optionValue: '全部',
 				showDate:'',
 				createDate:'',
 				postName: '',
-				postPhone: '',
 				postOption: '全部',
+				postShowDate:'',
+				postCreateDate:'',
 				options: [{
 						"label": '全部',
 						'value': '全部'
@@ -121,12 +131,13 @@
 			//查询
 			queryMsg: function() {
 				console.log(this.showDate)
-				if (this.name == '' && this.phone == '' && this.optionValue == '全部') {
+				if (this.bannerName == '' && this.showDate == '' && this.createDate == '' && this.optionValue == '全部') {
 					return
 				} else {
 					this.index = 0
-					this.postName = this.name
-					this.postPhone = this.phone
+					this.postName = this.bannerName
+					this.postShowDate = this.showDate
+					this.postCreateDate = this.createDate
 					this.postOption = this.optionValue
 					this.loadTableData()
 				}
@@ -134,11 +145,13 @@
 
 			//清空查询条件
 			clearQuery: function() {
-				this.name = ''
-				this.phone = ''
+				this.bannerName = ''
+				this.showDate = ''
+				this.createDate = ''
 				this.optionValue = '全部'
 				this.postName = ''
-				this.postPhone = ''
+				this.postShowDate = ''
+				this.postCreateDate = ''
 				this.postOption = '全部'
 				this.index = 0
 				this.loadTableData()
@@ -163,7 +176,7 @@
 					query.id = row.id
 				}
 				this.$router.push({
-					path: '/accountOperation',
+					path: '/bannerOperation',
 					query: query
 				})
 			},
@@ -174,40 +187,39 @@
 			loadTableData: function() {
 				var accessToken = window.localStorage.accessToken
 				var isEnabled = ''
-				if (this.postOption == '全部') {
-
-				} else if (this.postOption == '启用') {
-					isEnabled = 1
-				} else {
-					isEnabled = 0
-				}
+				
 				var postData = {
 					"accessToken": accessToken,
 					"pageSize": this.pageSize,
 					"index": this.index,
 					"name": this.postName.replace(/\s+/g, ""),
-					"mobile": this.postPhone.replace(/\s+/g, ""),
-					"isEnabled": isEnabled
 				}
 				if (postData.name) {
 
 				} else {
 					delete postData['name']
 				}
-
-				if (postData.mobile) {
-
+				
+				if (this.postOption == '全部') {
+					postData.isEnabled = -1
+				} else if (this.postOption == '启用') {
+					postData.isEnabled = 1
 				} else {
-					delete postData['mobile']
+					postData.isEnabled = 0
 				}
-
-				if (postData.isEnabled) {
-
-				} else {
-					delete postData['isEnabled']
+				
+				if(this.postShowDate){
+					postData.expiredStart = this.postShowDate[0]
+					postData.expiredEnd = this.postShowDate[1]
 				}
+				
+				if(this.postCreateDate){
+					postData.createDateStart = this.postCreateDate[0]
+					postData.createDateEnd = this.postCreateDate[1]
+				}
+				
 				// console.log(postData)
-				this.axios.post('/mgr/user/list', postData).then(res => {
+				this.axios.post('/mgr/banner/list', postData).then(res => {
 					// console.log(res)
 					if (res.data.code == 200) {
 						var list = res.data.data.list
@@ -217,14 +229,31 @@
 							} else {
 								list[i].isEnabled = '停用'
 							}
+							list[i].showDate = list[i].expiredStart + ' 至 ' + list[i].expiredEnd
 						}
+						
 						this.tableData = list
 						this.total = res.data.data.total
 						this.loading = false
 						lastPostData = postData
 					}
 				})
-			}
+			},
+		
+			//删除banner
+			deleteBanner:function(row){
+				var options = { confirmButtonText: '确定',cancelButtonText: '取消',type: 'warning'}
+				this.$alert.showModal('确定要将此banner删除？','提示',options).then(res=>{
+					console.log(row.id)
+					this.axios.post('/mgr/banner/rm',{"accessToken":window.localStorage.accessToken,"id":row.id}).then(res=>{
+						if(res.data.code == 200){
+							this.$alert.success('删除成功')
+							this.loadTableData()
+						}
+					})
+				})
+			},
+			
 		},
 	}
 </script>
@@ -296,5 +325,18 @@
 
 	.el-pagination {
 		margin-top: 20px;
+	}
+	.imgDiv{
+		display: inline-block;
+		width: 60px;
+		height: 60px;
+	}
+	.imgDiv img{
+		display: block;
+		width: auto;
+		height: auto;
+		max-width: 100%;
+		height: 100%;
+		margin: auto;
 	}
 </style>

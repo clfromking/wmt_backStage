@@ -8,6 +8,7 @@ import login from '@/components/login.vue'
 import index from '@/components/index.vue'
 //banner管理
 import banner from '@/components/banner.vue'
+import bannerOperation from '@/components/bannerOperation.vue'
 //商品管理
 import goodsAdmin from '@/components/goodsAdmin.vue'
 import goodsOperation from '@/components/goodsOperation.vue'
@@ -76,6 +77,11 @@ const router = new Router({
 					name:'banner',
 					path:'/banner',
 					component:banner
+				},
+				{
+					name:'bannerOperation',
+					path:'/bannerOperation',
+					component:bannerOperation
 				},
 				{
 					name:'goodsAdmin',

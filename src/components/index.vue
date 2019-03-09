@@ -132,7 +132,7 @@
 			},
 			
 			controlSelect:function(){
-				if(this.$route.path == '/banner'){
+				if(this.$route.path == '/banner' || this.$route.path == '/bannerOperation'){
 					this.openeds = ['1','1-1']
 				}
 				else if(this.$route.path == '/goodsAdmin' || this.$route.path == '/goodsOperation'){
