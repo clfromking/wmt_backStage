@@ -127,10 +127,19 @@
 
 			//跳转
 			routerTo: function(e,row) {
-				var query = {
-					type: e.target.dataset.typeid
+				var type = 0
+				if(e.target.innerText == '查看'){
+					
 				}
-				console.log(e)
+				else if(e.target.innerText == '编辑'){
+					type = 1
+				}
+				else{
+					type = 2
+				}
+				var query = {
+					type: type
+				}
 				if(row){
 					query.id = row.id
 				}

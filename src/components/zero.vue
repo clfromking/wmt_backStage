@@ -223,11 +223,18 @@
 			
 			
 			routerTo:function(e,row){
-// 				console.log(e.target.dataset.typeid)
-// 				console.log(row.id)
-// 				return
+				var type = 0	
+				if(e.target.innerText == '查看'){
+					
+				}
+				else if(e.target.innerText == '编辑'){
+					type = 1
+				}
+				else{
+					type = 2
+				}
 				var query = {
-					type: e.target.dataset.typeid
+					type: type
 				}
 				if(row){
 					query.id = row.cateId
