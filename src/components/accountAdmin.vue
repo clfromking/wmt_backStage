@@ -95,9 +95,15 @@
 			}
 		},
 		mounted: function() {
+			
+			this.minusPrice()
+			console.log(this.$store.state.roles)
 			this.loadTableData()
 		},
 		methods: {
+			minusPrice() {
+				this.$store.commit('changeRoles', 2); //提交`minusPrice,payload为2
+			},
 			//分页改变
 			handleCurrentChange: function(val) {
 				this.index = val - 1
@@ -145,6 +151,7 @@
 				if(row){
 					query.id = row.id
 				}
+				
 				this.$router.push({
 					path: '/accountOperation',
 					query: query

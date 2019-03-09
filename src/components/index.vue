@@ -34,9 +34,9 @@
 				</el-menu>
 			</el-aside>
 			<el-main>
-				<keep-alive :include="['accountAdmin']">	
+				<!-- <keep-alive :include="['accountAdmin']">	 -->
 					<router-view/>
-				</keep-alive>
+				<!-- </keep-alive> -->
 			</el-main>
 		</el-container>
 	</el-container>

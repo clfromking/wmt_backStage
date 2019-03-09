@@ -4,15 +4,15 @@
 			<el-breadcrumb-item :to="{ path: '/accountAdmin' }">账号管理</el-breadcrumb-item>
 			<el-breadcrumb-item>{{BreadcrumbText}}</el-breadcrumb-item>
 		</el-breadcrumb>
-		<el-form label-position='left' :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+		<el-form :v-loading='loading' label-position='left' :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 			<el-form-item label="姓名" prop="name">
 				<el-input :disabled="type==0" placeholder="请输入姓名" maxLength='20' v-model="ruleForm.name" clearable></el-input>
 			</el-form-item>
 			<el-form-item label="手机号码" prop="phone">
 				<el-input :disabled="type==0" placeholder="请输入手机号码" maxLength='11' v-model="ruleForm.phone" clearable></el-input>
 			</el-form-item>
-			<el-form-item label="密码" prop="password">
-				<el-input :disabled="type==0" placeholder="请输入密码" maxLength='12' v-model="ruleForm.password" clearable></el-input>
+			<el-form-item v-if='type!=0' label="密码" prop="password">
+				<el-input  :disabled="type==0" placeholder="请输入密码" maxLength='12' v-model="ruleForm.password" clearable></el-input>
 			</el-form-item>
 			<el-form-item label="状态" prop="status">
 				<el-radio-group :disabled="type==0" v-model="ruleForm.status">
@@ -20,22 +20,15 @@
 					<el-radio label="停用"></el-radio>
 				</el-radio-group>
 			</el-form-item>
-			<!-- <el-form-item label="角色" prop="type">
-				<el-checkbox-group v-model="ruleForm.type">
-					<el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox><br>
-					<el-checkbox label="地推活动" name="type"></el-checkbox><br>
-					<el-checkbox label="线下主题活动" name="type"></el-checkbox><br>
-					<el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-					<el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox><br>
-					<el-checkbox label="地推活动" name="type"></el-checkbox><br>
-					<el-checkbox label="线下主题活动" name="type"></el-checkbox><br>
-					<el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-					<el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox><br>
-					<el-checkbox label="地推活动" name="type"></el-checkbox><br>
-					<el-checkbox label="线下主题活动" name="type"></el-checkbox><br>
-					<el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-				</el-checkbox-group>
-			</el-form-item> -->
+			<el-form-item  label="角色" prop="type">
+				<template>
+					<el-checkbox-group :disabled="type==0" v-model="ruleForm.type">
+						<el-checkbox :checked="checkIds.indexOf(item.id)>-1" v-for='item in roles' @change='handleChange($event,item.id)' :label="item.role"  name="type"></el-checkbox>
+						
+					</el-checkbox-group>
+				</template>
+				
+			</el-form-item>
 			<el-form-item>
 				<el-button v-if='type!=0' type="primary" @click="submitForm('ruleForm')">{{type==1?"保存":"立即添加"}}</el-button>
 				<el-button v-if='type!=0' @click="resetForm('ruleForm')">{{type==1?"取消":"重置"}}</el-button>
@@ -101,7 +94,7 @@
 					type: [{
 						type: 'array',
 						required: true,
-						message: '请至少选择一个活动性质',
+						message: '请至少选择一个角色',
 						trigger: 'change'
 					}],
 					status: [{
@@ -109,10 +102,15 @@
 						message: '请选择一种账号状态',
 						trigger: 'change'
 					}],
-				}
+				},
+				roles:[],
+				checkIds:[],
+				loading:true
 			}
 		},
 		mounted: function() {
+			
+			// console.log(window.decodeURIComponent(window.atob(this.$route.query)))
 			this.type = this.$route.query.type
 			switch (Number(this.$route.query.type)) {
 				case 0: //查看
@@ -121,14 +119,28 @@
 					break;
 				case 1: //编辑
 					this.BreadcrumbText = '编辑'
-					this.loadPersonDetail()
+					this.loadPersonDetail()		
 					break;
 				case 2: //添加
 					this.BreadcrumbText = '添加'
+					this.loadRoles()
 					break;
 			}
+			
 		},
 		methods: {
+			//复选框改变
+			handleChange:function(e,id){
+				var checkIds = this.checkIds
+				if(e){
+					checkIds.push(id)
+				}
+				else{
+					checkIds.splice(checkIds.indexOf(id),1)
+				}
+				this.checkIds = checkIds
+				// console.log(e)
+			},
 			
 			//提交表单,(保存和添加)
 			submitForm(formName) {
@@ -145,7 +157,16 @@
 						}
 						if(Number(this.type) == 1){
 							
-							var userForm = {"isEnabled":isEnabled,"name": this.ruleForm.name,"password":this.ruleForm.password,"mobile":this.ruleForm.phone,"id":this.id}
+							var userForm = {
+								"isEnabled":isEnabled,
+								"name": this.ruleForm.name,
+								"password":this.ruleForm.password,
+								"mobile":this.ruleForm.phone,
+								"id":this.id,
+								"roles":this.checkIds
+							}
+// 							console.log(userForm)
+// 							return
 							var url = '/mgr/user/edit?accessToken='+localStorage.accessToken
 							//复杂的表单提交用封装的ajax,而不用axios
 							this.$ajax.post(url,userForm).then(res=>{
@@ -159,7 +180,15 @@
 							
 						}
 						else{
-							var userForm = {"isEnabled":isEnabled,"name":this.ruleForm.name,"password":this.ruleForm.password,"mobile":this.ruleForm.phone}
+							var userForm = {
+								"isEnabled":isEnabled,
+								"name":this.ruleForm.name,
+								"password":this.ruleForm.password,
+								"mobile":this.ruleForm.phone,
+								"roles":this.checkIds
+							}
+// 							console.log(userForm)
+// 							return
 							var url = '/mgr/user/add?accessToken='+localStorage.accessToken
 							this.$ajax.post(url,userForm).then(res=>{
 								if(res.code == 200){
@@ -190,6 +219,9 @@
 			},
 			
 			back:function(){
+				// console.log(this.ruleForm.type)
+// 				console.log(this.checkIds)
+// 				return
 				this.$router.back(-1)
 			},
 			
@@ -208,9 +240,32 @@
 						else{
 							this.ruleForm.status = '停用'
 						}
+						var checkIds = []
+						for(let i=0;i<res.data.data.roles.length;i++){
+							checkIds.push(res.data.data.roles[i].id)
+						}
+						this.checkIds = checkIds
+						console.log(checkIds.indexOf(1))
+						if(Number(this.$route.query.type) == 2){
+							
+						}
+						else{
+							this.loadRoles()
+						}
 					}
 				})
 			},
+			
+			loadRoles:function(){
+				this.axios.get('/mgr/user/role/form?accessToken='+window.localStorage.accessToken).then(res=>{
+					console.log(res)
+					if(res.data.code == 200){
+						this.roles = res.data.data
+						this.loading = false
+					}
+				})
+			},
+			
 		}
 	}
 </script>
@@ -249,7 +304,7 @@
 	}
 
 	.el-checkbox {
-		/* display: block; */
+		display: block;
 	}
 
 	.el-checkbox-group {

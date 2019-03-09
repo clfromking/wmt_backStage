@@ -10,7 +10,7 @@
 			</el-form-item>
 			<el-form-item  label='商品图片'>
 				<el-upload
-				  action="https://jsonplaceholder.typicode.com/posts/"
+				  action="http://192.168.0.198/mgr/img/upload"
 				  list-type="picture-card"
 				  :auto-upload = 'false'
 				  :limit='1'
@@ -163,7 +163,8 @@
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						// console.log(this.$computed.validate(this.ruleForm.price))
+						// console.log(this.$refs.upload._data.uploadFiles[0].url)
+						// return
 						if(Number(this.$refs.upload._data.uploadFiles.length) <= 0){
 							this.$alert.error('请上传一张封面图片')
 							return
@@ -186,9 +187,15 @@
 							this.$alert.error('库存量格式不正确')
 							return
 						}
-						var userForm = {"productStatus":isEnabled,"name": this.ruleForm.name,"price":Number(this.ruleForm.price)*100,"stockNum":this.ruleForm.stockNum||0,"id":this.id}
-						console.log(userForm)
-						// this.$refs.upload.submit()
+						// var userForm = {"productStatus":isEnabled,"name": this.ruleForm.name,"price":Number(this.ruleForm.price)*100,"stockNum":this.ruleForm.stockNum||0,"id":this.id}
+						if(this.$refs.upload._data.uploadFiles[0].url.indexOf('blob:') > -1){
+							
+							this.$refs.upload.submit()
+						}
+						else{
+							this.submitMsg(this.$refs.upload._data.uploadFiles[0].url)
+						}
+						
 					} 
 					else {
 						console.log('error submit!!');
@@ -304,7 +311,20 @@
 			
 			
 			//上传成功
-			successUpLoad:function(){
+			successUpLoad:function(res){
+				console.log(res)
+				var imgUrl = res.data
+				this.submitMsg(imgUrl)
+				// return
+				
+			},
+			
+			//上传失败
+			failUpLoad:function(){
+				this.$alert.error('图片上传失败，请重试')
+			},
+			
+			submitMsg:function(imgUrl){
 				var localStorage = window.localStorage
 				var isEnabled = 0
 				if(this.ruleForm.status == '上架'){
@@ -315,8 +335,18 @@
 				}
 				if(Number(this.type) == 1){
 					
-					var userForm = {"productStatus":isEnabled,"name": this.ruleForm.name,"price":Number(this.ruleForm.price)*100,"stockNum":this.ruleForm.stockNum,"id":this.id}
-					var url = '/mgr/user/edit?accessToken='+localStorage.accessToken
+					var userForm = {
+						"status":isEnabled,
+						"name": this.ruleForm.name,
+						"price":Number(this.ruleForm.price)*100,
+						"stockNum":this.ruleForm.stockNum,
+						"id":this.id,
+						"coverImg":imgUrl,
+						"firstLevel":0,
+						"secondLevel":0,
+						"thirdLevel":0
+					}
+					var url = '/mgr/product/material/edit?accessToken='+localStorage.accessToken
 					//复杂的表单提交用封装的ajax,而不用axios
 					this.$ajax.post(url,userForm).then(res=>{
 						if(res.code == 200){
@@ -329,8 +359,17 @@
 					
 				}
 				else{
-					var userForm = {"productStatus":isEnabled,"name": this.ruleForm.name,"price":Number(this.ruleForm.price)*100,"stockNum":this.ruleForm.stockNum}
-					var url = '/mgr/user/add?accessToken='+localStorage.accessToken
+					var userForm = {
+						"status":isEnabled,
+						"name": this.ruleForm.name,
+						"price":Number(this.ruleForm.price)*100,
+						"stockNum":this.ruleForm.stockNum,
+						"coverImg":imgUrl,
+						"firstLevel":0,
+						"secondLevel":0,
+						"thirdLevel":0
+					}
+					var url = '/mgr/product/material/save?accessToken='+localStorage.accessToken
 					this.$ajax.post(url,userForm).then(res=>{
 						if(res.code == 200){
 							this.$alert.success('添加成功')
@@ -340,13 +379,7 @@
 						}
 					})
 				}
-			},
-			
-			//上传失败
-			failUpLoad:function(){
-				this.$alert.error('图片上传失败，请重试')
-			},
-			
+			}
 			
 		}
 	}

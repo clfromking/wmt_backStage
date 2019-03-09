@@ -21,7 +21,7 @@
 				<div class="demo-input-suffix">
 					<div class="block">
 						<span class="demonstration">交易时间：</span>
-						<el-date-picker :default-time="['00:00:00','23:59:00']" value-format="yyyy-MM-dd HH:mm:ss" unlink-panels v-model="payDate" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
+						<el-date-picker :default-time="['00:00:00','23:59:59']" value-format="yyyy-MM-dd HH:mm:ss" unlink-panels v-model="payDate" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
 						</el-date-picker>
 					</div>
 				</div>

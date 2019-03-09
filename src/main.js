@@ -68,24 +68,30 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 
 //控制登录模块module
-const login = {
-	state:{
-		islogin:false
-	},
-	mutations:{
-		
-	},
-	actions:{
-		
-	}
-}
-
+// const login = {
+// 	state:{
+// 		islogin:false
+// 	},
+// 	mutations:{
+// 		
+// 	},
+// 	actions:{
+// 		
+// 	}
+// }
+// 
 
 const store = new Vuex.Store({
     //待添加
 	//有需要的模块加进去
-	modules:{
-		login : login,
+	state:{
+		roles:[1,2,4,3]
+	},
+	mutations:{
+		changeRoles:function(state,payload){
+			console.log(payload)
+			state.roles[0] = payload
+		}
 	}
 })
 
