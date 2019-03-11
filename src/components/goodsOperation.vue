@@ -237,11 +237,18 @@
 						this.listArr = listArr
 						
 						this.id = res.data.data.id
-						if(Number(res.data.data.isEnabled) == 1){
+						if(Number(res.data.data.status) == 1){
 							this.ruleForm.status = '上架'
 						}
 						else{
 							this.ruleForm.status = '下架'
+						}
+						
+						console.log(res.data.data.stockNum)
+						if(Number(res.data.data.stockNum) > 0){
+							this.ruleForm.status2 = '限制'
+							this.ruleForm.stockNum = Number(res.data.data.stockNum)
+							this.isShowStockNum = true
 						}
 					}
 				})

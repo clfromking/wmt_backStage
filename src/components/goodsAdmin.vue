@@ -43,7 +43,7 @@
 						
 						<el-table-column prop="newPrice" label="售价"  align='center' width="259%">
 						</el-table-column>
-						<el-table-column prop="stockNum" label="库存" align='center' width="259%">
+						<el-table-column prop="stockText" label="库存" align='center' width="259%">
 						</el-table-column>
 						<el-table-column prop="isEnabled" width="259%" align='center' label="商品状态">
 						</el-table-column>
@@ -207,6 +207,13 @@
 								list[i].isEnabled = '启用'
 							} else {
 								list[i].isEnabled = '停用'
+							}
+							
+							if(Number(list[i].stockNum) == 0){
+								list[i].stockText = '不限制'
+							}
+							else{
+								list[i].stockText = Number(list[i].stockNum)
 							}
 							
 							list[i].newPrice = '¥' + (Number(list[i].price)/100).toFixed(2)
