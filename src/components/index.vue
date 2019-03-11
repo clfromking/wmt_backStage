@@ -138,39 +138,69 @@
 			}
 		},
 		mounted:function(){
+			
 			console.log(this.$store.state.roles)
-			var storeRoles = this.$store.state.roles
-			console.log(this.options[0])
-			this.roleArr = this.$store.state.roles 
-			for(let i=0;i<this.options.length;i++){
-				// console.log(i)
-				for(let j=0;j<this.options[i].children.length;j++){
-					// console.log(storeRoles.indexOf(this.options[i].children[j].id))
-					if(storeRoles.indexOf(this.options[i].children[j].id) <= -1){
-// 						console.log(false)
-// 						return
-						this.options[i].show = false
-					}
-					else{
-						this.options[i].show = true
-						break
-					}
+			if(this.$store.state.roles){
+				if(window.localStorage.accessToken){
+					this.axios.post('/mgr/login/token',{"accessToken":window.localStorage.accessToken}).then(res=>{
+						if(res.data.code == 200){
+							// console.log(res.data.data)
+							this.$store.state.roles = res.data.data.powers
+							var localStorage=window.localStorage;
+							localStorage.accessToken = res.data.data.accessToken
+							localStorage.name  = res.data.data.name
+							localStorage.islogin = true
+							var storeRoles = this.$store.state.roles
+							this.roleArr = this.$store.state.roles 
+							for(let i=0;i<this.options.length;i++){
+											// console.log(i)
+								for(let j=0;j<this.options[i].children.length;j++){
+									if(storeRoles.indexOf(this.options[i].children[j].id) <= -1){
+										this.options[i].show = false
+									}
+									else{
+										this.options[i].show = true
+										break
+									}
+								}
+							}
+							console.log(this.options)
+							// 			
+							this.name = window.localStorage.name||"未知"
+							this.controlSelect()
+							
+						}
+					})
+				}
+				else{
+					this.$router.push({path:'/'})
 				}
 			}
-			console.log(this.options)
-// 			var roleArr = []
-// 			for(let i=0;i<8;i++){
-// 				roleArr.push(false)
+			else{
+				var storeRoles = this.$store.state.roles
+				this.roleArr = this.$store.state.roles 
+				for(let i=0;i<this.options.length;i++){
+								// console.log(i)
+					for(let j=0;j<this.options[i].children.length;j++){
+						if(storeRoles.indexOf(this.options[i].children[j].id) <= -1){
+							this.options[i].show = false
+						}
+						else{
+							this.options[i].show = true
+							break
+						}
+					}
+				}
+				console.log(this.options)
+				// 			
+				this.name = window.localStorage.name||"未知"
+				this.controlSelect()
+				
+			}
+// 			if(stor){
+// 				
 // 			}
-// 			console.log(roleArr)
-// 			for(let i=0;i<this.$store.state.roles.length;i++){
-// 				roleArr[this.$store.state.roles[i]] = true
-// 			}
-// 			
-// 			this.roleArr = roleArr
-			this.name = window.localStorage.name||"未知"
-			this.controlSelect()
-
+			
 		},
 		methods: {
 			goNav:function(event){
