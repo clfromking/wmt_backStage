@@ -43,7 +43,7 @@
 						
 						<el-table-column prop="newPrice" label="售价"  align='center' width="259%">
 						</el-table-column>
-						<el-table-column prop="mobile" label="库存" align='center' width="259%">
+						<el-table-column prop="stockNum" label="库存" align='center' width="259%">
 						</el-table-column>
 						<el-table-column prop="isEnabled" width="259%" align='center' label="商品状态">
 						</el-table-column>
@@ -203,7 +203,7 @@
 					if (res.data.code == 200) {
 						var list = res.data.data.list
 						for (let i = 0; i < list.length; i++) {
-							if (list[i].isEnabled == 1) {
+							if (list[i].status == 1) {
 								list[i].isEnabled = '启用'
 							} else {
 								list[i].isEnabled = '停用'
