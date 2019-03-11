@@ -64,9 +64,9 @@
 						</el-table-column>
 						<el-table-column prop="area" label="所在区域" align='center' width="222%">
 						</el-table-column>
-						<el-table-column prop="name" label="姓名" align='center' width="222%">
+						<el-table-column prop="poiUserName" label="姓名" align='center' width="222%">
 						</el-table-column>
-						<el-table-column prop="mobile" label="手机号" align='center' width="222%">
+						<el-table-column prop="poiUserMobile" label="手机号" align='center' width="222%">
 						</el-table-column>
 						<el-table-column prop="createTime" label="提交时间" align='center' width="222%">
 						</el-table-column>
