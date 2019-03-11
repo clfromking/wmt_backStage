@@ -27,9 +27,9 @@
 			
 			<el-aside style='width: 12.5rem;'>
 				<el-menu  :default-openeds="openeds" :default-active='openeds[1]'  unique-opened>
-					<el-submenu  v-for="(item,index) in options"  :index="''+(index+1)">
-						<template slot='title'><i :class="item.icon"></i>{{item.text}}</template>
-						<el-menu-item @click='goNav($event)' :data-path='item1.path' v-for="(item1,index1) in item.children" :index="''+(index+1)+''+'-'+(index1+1)">{{item1.text}}</el-menu-item>
+					<el-submenu v-if='item.show' v-for="(item,index) in options"  :index="''+(index+1)">
+						<template  slot='title'><i :class="item.icon"></i>{{item.text}}</template>
+						<el-menu-item v-if='roleArr.indexOf(item1.id)>-1'  @click='goNav($event)' :data-id='item1.id' :data-path='item1.path' v-for="(item1,index1) in item.children" :index="''+(index+1)+''+'-'+(index1+1)">{{item1.text}}</el-menu-item>
 					</el-submenu>
 				</el-menu>
 			</el-aside>
@@ -55,79 +55,126 @@
 					{
 						"icon":"el-icon-document",
 						"text":"内容管理",
+						"id":1,
+						"show":true,
 						"children":[
-							{"text":"banner管理","path":'/banner'},
+							{"text":"banner管理","path":'/banner',"id":2},
 						],
 					},
 					{
 						"icon":"el-icon-tickets",
 						"text":"商品管理",
+						"id":3,
+						"show":true,
 						"children":[
-							{"text":"商品管理","path":'/goodsAdmin'},
+							{"text":"商品管理","path":'/goodsAdmin',"id":4},
 							// {"text":"品类管理"},
 						],
 					},
 					{
 						"icon":"el-icon-goods",
 						"text":"订单管理",
+						"id":5,
+						"show":true,
 						"children":[
-							{"text":"商品订单" , "path":'/goodsOrder'},
-							{"text":"购买会员订单" ,'path':'/memberOrder'},
+							{"text":"商品订单" , "path":'/goodsOrder',"id":6},
+							{"text":"购买会员订单" ,'path':'/memberOrder',"id":7},
 						],
 					},
 					{
 						"icon":"el-icon-service",
 						"text":"服务单管理",
+						"show":true,
+						"id":8,
 						"children":[
-							{"text":"免租金开店" , "path":'/freeShop'},
-							{"text":"外卖运营" , 'path':'/takeOutOperating'},
+							{"text":"免租金开店" , "path":'/freeShop',"id":9},
+							{"text":"外卖运营" , 'path':'/takeOutOperating',"id":10},
 						],
 					},
 					{
 						"icon":"el-icon-news",
 						"text":"营销管理",
+						"show":true,
+						"id":11,
 						"children":[
-							{"text":"0元抢购",'path':'/zero'},
+							{"text":"0元抢购",'path':'/zero',"id":12,},
 						],
 					},
 					{
 						"icon":"el-icon-star-off",
 						"text":"会员管理",
+						"id":13,
+						"show":true,
 						"children":[
-							{"text":"会员管理","path":'/memberAdmin'},
+							{"text":"会员管理","path":'/memberAdmin',"id":14},
 						],
 					},
 					{
 						"icon":"el-icon-sort",
 						"text":"财务管理",
+						"id":15,
+						"show":true,
 						"children":[
-							{"text":"商户余额账户" , "path":'/storeBalanceAccount'},
-							{"text":"商户竞价账户","path":"/storeBiddingAccount"},
-							{"text":"总部账户","path":'/headAccount'},
+							{"text":"商户余额账户" , "path":'/storeBalanceAccount',"id":16,},
+							{"text":"商户竞价账户","path":"/storeBiddingAccount","id":17,},
+							{"text":"总部账户","path":'/headAccount',"id":18,},
 						],
 					},
 					{
 						"icon":"el-icon-view",
 						"text":"人员管理",
+						"id":19,
+						"show":true,
 						"children":[
-							{"text":"账号管理","path":'/accountAdmin'},
-							{"text":"角色管理","path":'/roleAdmin'},
+							{"text":"账号管理","path":'/accountAdmin',"id":20},
+							{"text":"角色管理","path":'/roleAdmin',"id":21,},
 						],
 					},	
 				],
 				code :'',
 				name:'',
 				openeds:[],
+				roleArr:[],
 			}
 		},
 		mounted:function(){
+			console.log(this.$store.state.roles)
+			var storeRoles = this.$store.state.roles
+			console.log(this.options[0])
+			this.roleArr = this.$store.state.roles 
+			for(let i=0;i<this.options.length;i++){
+				// console.log(i)
+				for(let j=0;j<this.options[i].children.length;j++){
+					// console.log(storeRoles.indexOf(this.options[i].children[j].id))
+					if(storeRoles.indexOf(this.options[i].children[j].id) <= -1){
+// 						console.log(false)
+// 						return
+						this.options[i].show = false
+					}
+					else{
+						this.options[i].show = true
+						break
+					}
+				}
+			}
+			console.log(this.options)
+// 			var roleArr = []
+// 			for(let i=0;i<8;i++){
+// 				roleArr.push(false)
+// 			}
+// 			console.log(roleArr)
+// 			for(let i=0;i<this.$store.state.roles.length;i++){
+// 				roleArr[this.$store.state.roles[i]] = true
+// 			}
+// 			
+// 			this.roleArr = roleArr
 			this.name = window.localStorage.name||"未知"
 			this.controlSelect()
 
 		},
 		methods: {
 			goNav:function(event){
-				console.log(event.$el.dataset.path)
+				console.log(event.$el.dataset)
 				this.$router.push({path:event.$el.dataset.path})
 			},
 			

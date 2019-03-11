@@ -107,6 +107,7 @@
 						if(res.data.code == 200){
 							console.log(res.data.data)
 							this.$alert.success('登录成功')
+							this.$store.state.roles = res.data.data.powers
 							setTimeout(()=>{
 								var localStorage=window.localStorage;
 								localStorage.accessToken = res.data.data.accessToken
@@ -142,6 +143,7 @@
 					this.axios.post('/mgr/login/mobile',{"smsCode":this.code , 'mobile':this.phone1 ,'authCode':this.imgCode1}).then(res=>{
 						if(res.data.code == 200){
 							console.log(res.data.data)
+							this.$store.state.roles = res.data.data.powers
 							this.$alert.success('登录成功')
 							setTimeout(()=>{
 								var localStorage=window.localStorage;

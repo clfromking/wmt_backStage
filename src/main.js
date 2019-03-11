@@ -85,7 +85,8 @@ const store = new Vuex.Store({
     //待添加
 	//有需要的模块加进去
 	state:{
-		roles:[1,2,4,3]
+		// roles:[2,4,6,7,9,10,12,14,16,17,18,20,21],
+		roles:[]
 	},
 	mutations:{
 		changeRoles:function(state,payload){

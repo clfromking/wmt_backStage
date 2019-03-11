@@ -71,7 +71,7 @@ const router = new Router({
 			name:'index',
 			path:'/index',
 			component:index,
-			redirect: {name: 'banner'}, // 跳转到下一级第一个
+			// redirect: {name: 'banner'}, // 跳转到下一级第一个
 			children:[
 				{
 					name:'banner',
