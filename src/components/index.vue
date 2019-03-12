@@ -210,7 +210,10 @@
 			},
 			
 			controlSelect:function(){
-				if(this.$route.path == '/banner' || this.$route.path == '/bannerOperation'){
+				if(this.$route.path == '/index' || this.$route.path == '/showIndex'){
+					this.openeds = []
+				}
+				else if(this.$route.path == '/banner' || this.$route.path == '/bannerOperation'){
 					this.openeds = ['1','1-1']
 				}
 				else if(this.$route.path == '/goodsAdmin' || this.$route.path == '/goodsOperation'){

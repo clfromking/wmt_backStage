@@ -6,6 +6,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import login from '@/components/login.vue'
 //首页
 import index from '@/components/index.vue'
+import showIndex from '@/components/showIndex.vue'
 //banner管理
 import banner from '@/components/banner.vue'
 import bannerOperation from '@/components/bannerOperation.vue'
@@ -71,8 +72,13 @@ const router = new Router({
 			name:'index',
 			path:'/index',
 			component:index,
-			// redirect: {name: 'banner'}, // 跳转到下一级第一个
+			redirect: {name: 'showIndex'}, // 跳转到下一级第一个
 			children:[
+				{
+					name:'showIndex',
+					path:'/showIndex',
+					component:showIndex
+				},
 				{
 					name:'banner',
 					path:'/banner',
