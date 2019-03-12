@@ -49,9 +49,19 @@ axios.interceptors.request.use(function (config) {
 });
 // 添加响应拦截器
 axios.interceptors.response.use(function (response) {
-	// console.log(response)
+	console.log(response)
+	Vue.prototype.$alert.error('服务器错误，请重试')
+	if(response.status == 200){
+		// return response;
+	}
+	else{
+		
+	}
+	if(response.data.code == 200){
+		console.log(1)
+	}
   // 对响应数据做点什么
-	return response;
+	
  }, function (error) {
 	 // console.log(111)
   // 对响应错误做点什么
