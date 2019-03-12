@@ -9,10 +9,11 @@
 			  <span class="el-dropdown-link clear">
 				<span style="display: inline-block;vertical-align: top;" class="left">{{name}}</span>
 				
-				<span class="left">
+				<span class="left point">
+					<!-- <img src="../assets/img/all/point.png" alt=""> -->
+					<!-- <span class="point">·</span>
 					<span class="point">·</span>
-					<span class="point">·</span>
-					<span class="point">·</span>
+					<span class="point">·</span> -->
 				</span>
 				
 			  </span>
@@ -364,6 +365,15 @@
 		width: 100px;
 	}
 	.point{
+		width: 15px;
+		height: 22px;
+		background: url(../assets/img/all/point.png) no-repeat;
+		display: inline-block;
+		background-size: 100% 100%;
+		margin-top: 39px;
+		/* margin-left: 16px; */
+	}
+	/* .point{
 		position: relative;
 		font-size: 30px;
 	}
@@ -372,13 +382,12 @@
 		right: -15px;
 	}
 	.point:nth-child(2){
-		/* top: -10px; */
 		right: 0.5px;
 	}
 	.point:nth-child(3){
 		top: 10px;
 		right: 16px;
-	}
+	} */
 	.el-menu-item{
 		text-align: left;
 		padding-left: 54px !important;

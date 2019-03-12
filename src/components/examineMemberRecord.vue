@@ -15,7 +15,7 @@
 			</p>
 			<p>
 				<span>会员期限：</span>
-				<span>{{expiredAt}}</span>
+				<span>{{beginAt}} - {{expiredAt}}</span>
 			</p>
 			<div class="listDiv">
 				<span class="specialSpan" style="vertical-align: top;">历史购买记录：</span>
@@ -55,7 +55,8 @@
 				branchName:'',
 				poiUserMobile:'',
 				expiredAt:'',
-				recordList:''
+				recordList:'',
+				beginAt:''
 			}
 		},
 		mounted:function(){
@@ -77,6 +78,7 @@
 						this.branchName = res.data.data.branchName
 						this.poiUserMobile = res.data.data.poiUserMobile
 						this.expiredAt = res.data.data.expiredAt
+						this.beginAt = res.data.data.beginAt
 						for(let i =0;i<res.data.data.list.length;i++){
 							if(res.data.data.list[i].durationUnit == 'DAY'){
 								res.data.data.list[i].durationUnitText = '包日卡'

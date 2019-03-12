@@ -33,7 +33,7 @@
 					<el-table :data="tableData" v-loading="loading" style="width: 100%;display: inline-block;">
 						<el-table-column prop="branchName" label="品牌名称" row-class-name='test' align='center' width="518%">
 						</el-table-column>
-						<el-table-column prop="expiredAt" label="会员期限" align='center' width="518%">
+						<el-table-column prop="At" label="会员期限" align='center' width="518%">
 						</el-table-column>
 						<el-table-column label="操作" align='center' width="518%">
 							<template slot-scope="scope">			
@@ -165,12 +165,18 @@
 					console.log(res)
 					if (res.data.code == 200) {
 						var list = res.data.data.list
+						if(list.length>0){
+							for(let i=0;i<list.length;i++){
+								list[i].At = list[i].beginAt + ' 至 ' + list[i].expiredAt
+							}
+						}
 						this.tableData = list
 						this.total = res.data.data.total
 						this.loading = false
 						if(list.length <= 0){
 							this.$alert.info('暂无数据')
 						}
+						
 					}
 				}).catch(error=>{
 					this.$alert.error('网络错误，请刷新重试')

@@ -223,6 +223,10 @@
 					// console.log(res)
 					if (res.data.code == 200) {
 						var list = res.data.data.list
+						if(list.length <= 0){
+							this.$alert.info('暂无数据')
+							return
+						}
 						for (let i = 0; i < list.length; i++) {
 							if (list[i].isEnabled == 1) {
 								list[i].isEnabled = '启用'
@@ -236,6 +240,8 @@
 						this.total = res.data.data.total
 						this.loading = false
 						lastPostData = postData
+						
+						
 					}
 				})
 			},

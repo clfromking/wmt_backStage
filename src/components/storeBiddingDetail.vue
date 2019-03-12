@@ -65,7 +65,7 @@
 					"orderId":this.$route.query.orderId,
 					"payType":this.$route.query.payType
 				}
-				this.axios.post('/mgr/balance/tran/detail',postData).then(res=>{
+				this.axios.post('/mgr/bidding/tran/detail',postData).then(res=>{
 					console.log(res)
 					if(res.data.code == 200){
 						res.data.data.payamount = '¥' + (Number(res.data.data.amount)/100).toFixed(2)

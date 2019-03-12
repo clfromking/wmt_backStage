@@ -19,7 +19,7 @@
 					<el-input maxlength='20' clearable placeholder="请输入密码" v-model="password" class="input-with-select">
 					</el-input>
 					<div class="imgCodeDiv clear">
-						<el-input maxlength='4' clearable placeholder="请输入图形验证码" v-model="imgCode0" class="input-with-select imgCodeInput fl">
+						<el-input maxlength='4' @keyup.enter.native='passwordLogin' clearable placeholder="请输入图形验证码" v-model="imgCode0" class="input-with-select imgCodeInput fl">
 						</el-input>
 						<img :src="src" class="imgCode fl" alt="">
 					</div>
@@ -38,7 +38,7 @@
 						<el-button slot="append" :disabled="getCodeText!=='获取验证码'" @click="getCode" >{{getCodeText}}</el-button>
 					</el-input>
 					<div class="imgCodeDiv clear">
-						<el-input maxlength='4' clearable placeholder="请输入图形验证码" v-model="imgCode1" class="input-with-select imgCodeInput fl">
+						<el-input maxlength='4' @keyup.enter.native='codeLogin' clearable placeholder="请输入图形验证码" v-model="imgCode1" class="input-with-select imgCodeInput fl">
 						</el-input>
 						<img :src="src" class="imgCode fl" alt="">
 					</div>
@@ -225,7 +225,7 @@
 		border-radius: 10px;
 	}
 	.title{
-		height: 10vh;
+		height: 90px;
 		/* background: #0000FF; */
 		display: flex;
 		color: #000;
@@ -237,7 +237,7 @@
 		height: 100%;
 		text-align: center;
 		color: #000;
-		line-height: 10vh;
+		line-height: 90px;
 		cursor: pointer;
 		font-size: .8rem;
 	}
@@ -247,7 +247,7 @@
 	}
 	.phone{
 		width: 15vw;
-		margin: 3vh auto 2vh;
+		margin: 27px auto 18px;
 	}
 	.input-with-select{
 		width: 15vw;
@@ -255,7 +255,7 @@
 	.login_btn{
 		display: block;
 		width: 15vw;
-		margin: 4vh auto;
+		margin: 28px auto;
 	}
 	
 	
